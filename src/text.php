@@ -28,7 +28,7 @@ const TEXT_FAILURE_GROUP_INVALID_STATE = "Sembra che il tuo gruppo non sia pront
 const TEXT_CMD_HELP = "Trovi le informazioni per usare il bot sul <a href=\"" . WEBSITE_START . "\">sito ufficiale dell’Open Week</a>.";
 
 // Response to "/reset"
-const TEXT_CMD_RESET = "Comando di reset, non implementato.";
+const TEXT_CMD_RESET = "Reset effettuato.";
 
 // Responses to "/start"
 const TEXT_CMD_START_NEW = "Ciao, %FULL_NAME%! Benvenuto al bot dell’<b>Open Week</b> presso l’Università di Urbino. Segui le <a href=\"" . WEBSITE_START . "\">istruzioni sul sito ufficiale</a> per iniziare.";

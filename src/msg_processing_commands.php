@@ -68,6 +68,12 @@ function msg_processing_commands($context) {
         return true;
     }
     else if(starts_with($text, '/reset')) {
+        if($context->is_registered()) {
+            db_perform_action("DELETE FROM `reached_locations` WHERE `id` = {$context->get_identity()}");
+        }
+
+        db_perform_action("DELETE FROM `identities` WHERE `telegram_id` = {$context->get_user_id()}");
+
         $context->reply(TEXT_CMD_RESET);
 
         return true;
