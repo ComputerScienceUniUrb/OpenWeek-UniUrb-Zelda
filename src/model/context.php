@@ -38,6 +38,13 @@ class Context {
         return ($this->identity !== 0);
     }
 
+    /**
+     * Gets the user's synthetic (generated) ID.
+     */
+    function get_identity() {
+        return ($this->identity !== 0) ? $this->identity : null;
+    }
+
     /* True if the talking user is an admin */
     function is_admin() {
         return $this->is_admin;

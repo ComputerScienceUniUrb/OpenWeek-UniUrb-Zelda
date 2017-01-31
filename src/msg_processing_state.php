@@ -16,7 +16,7 @@ require_once('model/context.php');
  *  @param Context $context - message context.
  * @return bool True if handled, false if no need.
  */
-function msg_processing_handle_group_state($context) {
+function msg_processing_handle_state($context) {
     if(!$context->is_registered()) {
         return false;
     }
@@ -41,6 +41,20 @@ function msg_processing_handle_response($context) {
 
     switch($context->get_state()) {
         case STATE_1:
+            Logger::debug("Handling state 1", __FILE__, $context);
+
+            $input = extract_number($context->get_response());
+            Logger::info("Response is {$input}", __FILE__, $context);
+
+            if($input == TEXT_CMD_START_TARGET_1_RESPONSE) {
+                $context->reply(TEXT_CMD_START_TARGET_1_CORRECT);
+            }
+            else {
+                $context->reply(TEXT_CMD_START_TARGET_1_WRONG);
+            }
+
+            $context->set_state(STATE_1_OK);
+            msg_processing_handle_state($context);
             return true;
 
         case STATE_2:

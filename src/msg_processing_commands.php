@@ -11,6 +11,39 @@ require_once('lib.php');
 require_once('msg_processing_state.php');
 require_once('model/context.php');
 
+/**
+ * Switches to location for current user.
+ * @param $context Context.
+ * @param $payload Secret string payload that identifies location.
+ */
+function switch_to_location($context, $payload) {
+    $location = db_row_query("SELECT l.`id`, l.`target_state`, r.`timestamp` FROM `locations` AS l LEFT JOIN `reached_locations` AS r ON l.`id` = r.`location_id` WHERE `code` = '" . db_escape($payload) . "' AND r.`id` = {$context->get_identity()}");
+    if($location !== null) {
+        $location_id = intval($location[0]);
+        $target_state = intval($location[1]);
+
+        if($location[2] == null) {
+            // Location never reached
+            $context->set_state($target_state);
+
+            db_perform_action("INSERT INTO `reached_locations` (`id`, `location_id`, `timestamp`) VALUES ({$context->get_identity()}, {$location_id}, NOW());");
+
+            $context->reply(constant('TEXT_CMD_START_TARGET_' . $location_id));
+            $context->reply(constant('TEXT_CMD_START_TARGET_' . $location_id . '_QUESTION'), null, array(
+                'reply_markup' => array(
+                    'keyboard' => constant('TEXT_CMD_START_TARGET_' . $location_id . '_KEYBOARD')
+                )
+            ));
+        }
+        else {
+            // Location already reached
+        }
+    }
+    else {
+        $context->reply(TEXT_CMD_START_UNKNOWN_PAYLOAD);
+    }
+}
+
 /*
  * Processes commands in text messages.
  * @param $context Context.
@@ -39,13 +72,13 @@ function msg_processing_commands($context) {
             else {
                 $context->reply(TEXT_CMD_REGISTER_CONFIRM);
 
-                msg_processing_handle_group_state($context);
+                msg_processing_handle_state($context);
             }
         }
         else {
             $context->reply(TEXT_CMD_REGISTER_REGISTERED);
 
-            msg_processing_handle_group_state($context);
+            msg_processing_handle_state($context);
         }
 
         return true;
@@ -59,7 +92,7 @@ function msg_processing_commands($context) {
             if($context->is_registered()) {
                 $context->reply(TEXT_CMD_START_REGISTERED);
 
-                msg_processing_handle_group_state($context);
+                msg_processing_handle_state($context);
             }
             else {
                 $context->reply(TEXT_CMD_START_NEW);
@@ -69,23 +102,7 @@ function msg_processing_commands($context) {
         else if(mb_strlen($payload) === 8) {
             Logger::debug("Treasure hunt code: '{$payload}'", __FILE__, $context);
 
-            $location = db_row_query("SELECT `id`, `target_state` FROM `locations` WHERE `code` = '" . db_escape($payload) . "'");
-            if($location !== null) {
-                $location_id = intval($location[0]);
-                $target_state = intval($location[1]);
 
-                $context->set_state($target_state);
-
-                $context->reply(constant('TEXT_CMD_START_TARGET_' . $location_id));
-                $context->reply(constant('TEXT_CMD_START_TARGET_' . $location_id . '_QUESTION'), null, array(
-                    'reply_markup' => array(
-                        'keyboard' => constant('TEXT_CMD_START_TARGET_' . $location_id . '_KEYBOARD')
-                    )
-                ));
-            }
-            else {
-                $context->reply(TEXT_CMD_START_UNKNOWN_PAYLOAD);
-            }
         }
         // Something else (?)
         else {

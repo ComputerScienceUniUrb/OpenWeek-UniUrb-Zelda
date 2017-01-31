@@ -39,6 +39,10 @@ const TEXT_CMD_START_UNKNOWN_PAYLOAD = "Non ho capito… Forse hai scritto a man
 const TEXT_CMD_START_TARGET_1 = "Benvenuto ad Urbino, io sono Zelda, il BOT dell’Università degli Studi di Urbino ‘Carlo Bo’ e ti guiderò alla scoperta dell’Università durante questa giornata di orientamento. Sono stato progettato e sviluppato da docenti e da ex-studenti del Corso di Laurea di Informatica Applicata di questa Università.";
 const TEXT_CMD_START_TARGET_1_QUESTION = "Sai in che anno è stata fondata L’Università degli Studi di Urbino ‘Carlo Bo’?";
 const TEXT_CMD_START_TARGET_1_KEYBOARD = [ [ 'Nel 1506' ], [ 'Nel 1706' ], [ 'Nel 1906' ] ];
+const TEXT_CMD_START_TARGET_1_RESPONSE = 1506;
+const TEXT_CMD_START_TARGET_1_CORRECT = "Complimenti hai indovinato! L’Università di Urbino, fondata nel 1506, con la sua storia  ultra-cinquecentenaria è una delle università più antiche d’Europa. Nel 2003 l'università è stata intitolata al senatore a vita Carlo Bo che ne è stato il magnifico rettore per cinquantaquattro anni, dal 1947 al 2001.";
+const TEXT_CMD_START_TARGET_1_WRONG = "Peccato non hai indovinato! Pensa, le origini dell’Università di Urbino risalgono al 1506. L’Università di Urbino con la sua storia ultra-cinquecentenaria è una delle università più antiche d’Europa. Nel 2003 l'università è stata intitolata al senatore a vita Carlo Bo che ne è stato il magnifico rettore per cinquantaquattro anni, dal 1947 al 2001.";
+
 const TEXT_CMD_START_TARGET_2 = "";
 const TEXT_CMD_START_TARGET_3 = "";
 const TEXT_CMD_START_TARGET_4 = "";

@@ -104,6 +104,21 @@ function escape_accents($text) {
 }
 
 /**
+ * Extracts a numeric value from a string.
+ */
+function extract_number($text) {
+    $matches = array();
+    $ret = mb_ereg("[0-9]+", $text, $matches);
+
+    if($ret === false || count($matches) == 0) {
+        return 0;
+    }
+    else {
+        return intval($matches[0]);
+    }
+}
+
+/**
  * Unite two arrays, even if they are null.
  * Always returns a valid array.
  */
