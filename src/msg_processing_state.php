@@ -30,6 +30,20 @@ function msg_processing_handle_state($context) {
     return false;
 }
 
+function process_response($context, $state, $response) {
+    Logger::info("Response is {$input}", __FILE__, $context);
+
+    if($input == constant("TEXT_CMD_START_TARGET_{$state}_RESPONSE")) {
+        $context->reply(constant("TEXT_CMD_START_TARGET_{$state}_CORRECT"));
+    }
+    else {
+        $context->reply(constant("TEXT_CMD_START_TARGET_{$state}_WRONG"));
+    }
+
+    $context->set_state(constant("STATE_{$state}_OK"));
+    msg_processing_handle_state($context);
+}
+
 /**
  * Handles the user's response if needed by her/his state.
  * @return bool True if handled, false otherwise.
@@ -41,33 +55,25 @@ function msg_processing_handle_response($context) {
 
     switch($context->get_state()) {
         case STATE_1:
-            Logger::debug("Handling state 1", __FILE__, $context);
-
             $input = extract_number($context->get_response());
-            Logger::info("Response is {$input}", __FILE__, $context);
-
-            if($input == TEXT_CMD_START_TARGET_1_RESPONSE) {
-                $context->reply(TEXT_CMD_START_TARGET_1_CORRECT);
-            }
-            else {
-                $context->reply(TEXT_CMD_START_TARGET_1_WRONG);
-            }
-
-            $context->set_state(STATE_1_OK);
-            msg_processing_handle_state($context);
+            process_response($context, 1, $input);
             return true;
 
         case STATE_2:
+            $input = extract_number($context->get_response());
+            process_response($context, 2, $input);
             return true;
 
         case STATE_3:
-            return true;
+            break;
 
         case STATE_4:
+            $input = extract_number($context->get_response());
+            process_response($context, 1, $input);
             return true;
 
         case STATE_5:
-            return true;
+            break;
     }
 
     return false;

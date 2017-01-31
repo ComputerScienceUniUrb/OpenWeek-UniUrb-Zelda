@@ -55,13 +55,14 @@ else if($in->is_private()) {
             return;
         }
 
-        // Registration responses
+        // Interpret responses if needed
         if(msg_processing_handle_response($context)) {
             return;
         }
 
         // ?
         $context->reply(TEXT_FALLBACK_RESPONSE);
+        msg_processing_handle_state($context);
     }
     else if($in->is_photo()) {
         // Registration responses
