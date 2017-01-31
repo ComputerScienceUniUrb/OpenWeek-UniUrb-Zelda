@@ -32,10 +32,19 @@ class Context {
     }
 
     /**
-     * Returns whether the current user is registered or not.
+     * Returns whether the current user is fully registered or not.
      */
     function is_registered() {
-        return ($this->identity !== 0);
+        return ($this->identity !== 0 && $this->state >= STATE_REG_OK);
+    }
+
+    function require_registration() {
+        if(!$this->is_registered()) {
+            $this->reply(TEXT_FAILURE_NOT_REGISTERED);
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -145,15 +154,20 @@ class Context {
      * Register identity for current user.
      */
     function register() {
-        Logger::debug("Registering user identity", __FILE__, $this);
+        if($this->identity === 0) {
+            Logger::debug("Registering user identity", __FILE__, $this);
 
-        if(db_perform_action("INSERT INTO `identities` (`telegram_id`, `full_name`, `first_access`, `last_access`) VALUES({$this->get_user_id()}, '{$this->message->get_sender_full_name()}', NOW(), NOW())") === false) {
-            Logger::error("Failed to register group status for user #{$this->get_user_id()}", __FILE__, $this);
-            return false;
+            if(db_perform_action("INSERT INTO `identities` (`telegram_id`, `full_name`, `first_access`, `last_access`) VALUES({$this->get_user_id()}, '{$this->message->get_sender_full_name()}', NOW(), NOW())") === false) {
+                Logger::error("Failed to register group status for user #{$this->get_user_id()}", __FILE__, $this);
+                return false;
+            }
+            else {
+                $this->refresh();
+
+                return true;
+            }
         }
         else {
-            $this->refresh();
-
             return true;
         }
     }

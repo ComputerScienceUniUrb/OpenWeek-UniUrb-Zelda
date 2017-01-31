@@ -15,6 +15,7 @@ require_once('msg_processing_commands.php');
 require_once('msg_processing_state.php');
 
 const STATE_NEW             = 0;    // registration started
+const STATE_REG_OK          = 9;    // registration ok
 const STATE_1               = 10;   // first step
 const STATE_1_OK            = 11;   // first step ok
 const STATE_2               = 20;
@@ -47,11 +48,6 @@ else if($in->is_private()) {
 
         // Base commands
         if(msg_processing_commands($context)) {
-            return;
-        }
-
-        if(!$context->is_registered()) {
-            $context->reply(TEXT_FAILURE_NOT_REGISTERED);
             return;
         }
 

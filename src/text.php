@@ -23,6 +23,7 @@ const TEXT_FAILURE_GENERAL = "Oh! Questo è imbarazzante… Qualcosa è andato s
 const TEXT_FAILURE_NOT_REGISTERED = "Non mi sembra tu sia registrato. 🤔\nSegui le <a href=\"" . WEBSITE_START . "\">istruzioni sul sito ufficiale</a> per iniziare.";
 const TEXT_FAILURE_GROUP_ALREADY_ACTIVE = "Sei già pronto per giocare.";
 const TEXT_FAILURE_GROUP_INVALID_STATE = "Sembra che il tuo gruppo non sia pronto per giocare. 🙁 Segui le istruzioni che ti sono state date.";
+const TEXT_FAILURE_SCHOOL_INVALID = "Il codice non sembra essere valido. 🙁";
 
 // Response to "/help"
 const TEXT_CMD_HELP = "Trovi le informazioni per usare il bot sul <a href=\"" . WEBSITE_START . "\">sito ufficiale dell’Open Week</a>.";
@@ -66,9 +67,11 @@ const TEXT_CMD_START_ALREADY_REACHED = "Sei già stato in questo luogo.";
 // Commands
 const TEXT_CMD_REGISTER_CONFIRM = "Benvenuto al bot dell’<b>Open Week</b> presso l’Università di Urbino! 🎉";
 const TEXT_CMD_REGISTER_REGISTERED = "Risulti già registrato. 👍";
+const TEXT_CMD_REGISTER_SCHOOL_OK = "Ok, quindi studi presso la scuola %SCHOOL_NAME% di %SCHOOL_PLACE%.";
 
 // States
-const TEXT_STATE_NEW = "Quando raggiungi Urbino, scannerizza il <i>QR Code</i> che troverai a Borgo Mercatale o a Porta Santa Lucia. Ci vediamo lì!";
+const TEXT_STATE_NEW = "Per completare la registrazione, fornisci qui il <i>codice meccanografico</i> della tua scuola di provenienza.";
+const TEXT_STATE_REG_OK = "Quando raggiungi Urbino, scannerizza il <i>QR Code</i> che troverai a Borgo Mercatale o a Porta Santa Lucia. Ci vediamo lì!";
 
 // Default response for anything else
 const TEXT_FALLBACK_RESPONSE = "Scusami, non ho capito cosa intendi. Usa i comandi /start o /help.";

@@ -17,13 +17,13 @@ require_once('model/context.php');
  * @return bool True if handled, false if no need.
  */
 function msg_processing_handle_state($context) {
-    if(!$context->is_registered()) {
-        return false;
-    }
-
     switch($context->get_state()) {
         case STATE_NEW:
             $context->reply(TEXT_STATE_NEW);
+            return true;
+
+        case STATE_REG_OK:
+            $context->reply(TEXT_STATE_REG_OK);
             return true;
     }
 
@@ -49,11 +49,24 @@ function process_response($context, $state, $response) {
  * @return bool True if handled, false otherwise.
  */
 function msg_processing_handle_response($context) {
-    if(!$context->is_registered()) {
-        return false;
-    }
-
     switch($context->get_state()) {
+        case STATE_NEW:
+            $code = $context->get_response();
+            $school = db_row_query("SELECT `denominazione`, `comune` FROM `schools` WHERE `codice_scuola` = '" . db_escape($code) . "'");
+            if($school == null) {
+                $context->reply(TEXT_FAILURE_SCHOOL_INVALID);
+            }
+            else {
+                $context->reply(TEXT_CMD_REGISTER_SCHOOL_OK, array(
+                    '%SCHOOL_NAME%'  => $school[0],
+                    '%SCHOOL_PLACE%' => $school[1]
+                ));
+                $context->set_state(STATE_REG_OK);
+            }
+            msg_processing_handle_state($context);
+
+            return true;
+
         case STATE_1:
             $input = extract_number($context->get_response());
             process_response($context, 1, $input);

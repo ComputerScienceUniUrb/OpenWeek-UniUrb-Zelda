@@ -118,7 +118,9 @@ function msg_processing_commands($context) {
         else if(mb_strlen($payload) === 8) {
             Logger::debug("Treasure hunt code: '{$payload}'", __FILE__, $context);
 
-            switch_to_location($context, $payload);
+            if($context->require_registration()) {
+                switch_to_location($context, $payload);
+            }
         }
         // Something else (?)
         else {
