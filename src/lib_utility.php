@@ -89,8 +89,18 @@ function extract_response($text) {
     return escape_accents($lower_response);
 }
 
+/**
+ * Trims special characters and whitespace from string.
+ */
 function trim_response($text) {
     return trim($text, ' /,.!?;:\'"');
+}
+
+/**
+ * Normalize accents and other character modifiers in string.
+ */
+function escape_accents($text) {
+    return preg_replace('~&([a-z]{1,2})(?:acute|cedil|circ|grave|lig|orn|ring|slash|th|tilde|uml|caron);~i', '$1', htmlentities($text, ENT_QUOTES, 'UTF-8'));
 }
 
 /**
