@@ -75,7 +75,7 @@ class Context {
      * Enables markdown parsing and disables web previews by default.
      */
     function reply($message, $additional_values = null, $additional_parameters = null) {
-        return $this->reply($this->get_chat_id(), $message, $additional_values, $additional_parameters);
+        return $this->send($this->get_chat_id(), $message, $additional_values, $additional_parameters);
     }
 
     /**
@@ -103,7 +103,7 @@ class Context {
         $hydrated = hydrate($message, unite_arrays($hydration_values, $additional_values));
 
         return telegram_send_message(
-            $this->get_telegram_chat_id(),
+            $receiver,
             $hydrated,
             unite_arrays(array(
                 'parse_mode' => 'HTML',
