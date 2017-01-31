@@ -37,6 +37,12 @@ function switch_to_location($context, $payload) {
         }
         else {
             // Location already reached
+            if($context->get_state() / 10 != $location_id) {
+                // Signal only if user has moved elsewhere in the meantime
+                $context->reply(TEXT_CMD_START_ALREADY_REACHED);
+            }
+
+            msg_processing_handle_state($context);
         }
     }
     else {

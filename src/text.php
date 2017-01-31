@@ -44,9 +44,14 @@ const TEXT_CMD_START_TARGET_1_CORRECT = "Complimenti hai indovinato! L’Univers
 const TEXT_CMD_START_TARGET_1_WRONG = "Peccato non hai indovinato! Pensa, le origini dell’Università di Urbino risalgono al 1506. L’Università di Urbino con la sua storia ultra-cinquecentenaria è una delle università più antiche d’Europa. Nel 2003 l'università è stata intitolata al senatore a vita Carlo Bo che ne è stato il magnifico rettore per cinquantaquattro anni, dal 1947 al 2001.";
 
 const TEXT_CMD_START_TARGET_2 = "";
+
 const TEXT_CMD_START_TARGET_3 = "";
+
 const TEXT_CMD_START_TARGET_4 = "";
+
 const TEXT_CMD_START_TARGET_5 = "";
+
+const TEXT_CMD_START_ALREADY_REACHED = "Sei già stato in questo luogo.";
 
 // Commands
 const TEXT_CMD_REGISTER_CONFIRM = "Benvenuto al bot dell’<b>Open Week</b> presso l’Università di Urbino! 🎉";
