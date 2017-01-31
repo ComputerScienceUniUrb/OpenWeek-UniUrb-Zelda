@@ -50,6 +50,22 @@ function starts_with($text = '', $substring = '') {
 }
 
 /**
+ * Extracts the first command from a given text string.
+ */
+function extract_command($text = '') {
+    $matches = array();
+    if(preg_match("/^\/([a-zA-Z0-9_]*)( |$)/", $text, $matches) !== 1) {
+        return null;
+    }
+
+    if(sizeof($matches) < 2) {
+        return null;
+    }
+
+    return $matches[1];
+}
+
+/**
  * Extracts the command payload from a string.
  * Returns the string following the first command in a string (i.e., given
  * input "/start 123", returns "123").
@@ -59,4 +75,50 @@ function starts_with($text = '', $substring = '') {
  */
 function extract_command_payload($text = '') {
     return mb_ereg_replace("^\/[a-zA-Z0-9_]*( |$)", '', $text);
+}
+
+/**
+ * Extracts a cleaned-up response from the user.
+ */
+function extract_response($text) {
+    if(!$text) {
+        return '';
+    }
+
+    $lower_response = mb_strtolower(trim_response($text));
+    return escape_accents($lower_response);
+}
+
+function trim_response($text) {
+    return trim($text, ' /,.!?;:\'"');
+}
+
+/**
+ * Unite two arrays, even if they are null.
+ * Always returns a valid array.
+ */
+function unite_arrays($a, $b) {
+    if(!$a || !is_array($a)) {
+        $a = array();
+    }
+
+    if($b && is_array($b)) {
+        $a = array_merge($a, $b);
+    }
+
+    return $a;
+}
+
+/**
+ * Hydrates a string value using a map of key/values.
+ */
+function hydrate($text, $map = null) {
+    if(!$map || !is_array($map)) {
+        $map = array();
+    }
+
+    foreach($map as $from => $to) {
+        $text = str_replace($from, $to, $text);
+    }
+    return $text;
 }

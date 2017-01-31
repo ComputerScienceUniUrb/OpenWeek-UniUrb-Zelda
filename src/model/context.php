@@ -15,13 +15,9 @@ class Context {
 
     private $message;
 
+    private $identity = 0;
     private $is_admin = false;
-
-    private $group_id = null;
-    private $group_name = null;
-    private $group_state = null;
-    private $group_track_id = null;
-    private $group_track_index = 0;
+    private $state = 0;
 
     /**
      * Construct Context class.
@@ -35,14 +31,16 @@ class Context {
         $this->refresh();
     }
 
+    /**
+     * Returns whether the current user is registered or not.
+     */
+    function is_registered() {
+        return ($this->identity !== 0);
+    }
+
     /* True if the talking user is an admin */
     function is_admin() {
         return $this->is_admin;
-    }
-
-    /* The running game ID */
-    function get_game_id() {
-        return CURRENT_GAME_ID;
     }
 
     function get_user_id() {
@@ -57,6 +55,10 @@ class Context {
         return $this->message;
     }
 
+    function get_state() {
+        return $this->state;
+    }
+
     /**
      * Gets a cleaned-up response from the user, if any.
      */
@@ -68,69 +70,50 @@ class Context {
             return '';
     }
 
-    function get_group_id() {
-        return $this->group_id;
-    }
-
-    function get_group_name() {
-        return $this->group_name;
-    }
-
-    function get_group_state() {
-        return $this->group_state;
-    }
-
-    function get_track_id() {
-        return $this->group_track_id;
-    }
-
-    function get_track_index() {
-        if($this->group_track_id === null)
-            return null;
-        else
-            return $this->group_track_index;
-    }
-
     /**
      * Replies to the current incoming message.
      * Enables markdown parsing and disables web previews by default.
      */
-    function reply($message, $additional_values = null) {
-        $hydration_values = array(
-            '%FULL_NAME%' => $this->get_message()->get_full_sender_name(),
-            '%GROUP_NAME%' => $this->get_group_name()
-        );
-
-        $hydrated = hydrate($message, unite_arrays($hydration_values, $additional_values));
-
-        return telegram_send_message(
-            $this->get_chat_id(),
-            $hydrated,
-            array(
-                'parse_mode' => 'Markdown',
-                'disable_web_page_preview' => true
-            )
-        );
+    function reply($message, $additional_values = null, $additional_parameters = null) {
+        return $this->reply($this->get_chat_id(), $message, $additional_values, $additional_parameters);
     }
 
     /**
      * Sends out a message on the channel.
      */
     function channel($message, $additional_values = null) {
+        return $this->send(CHAT_CHANNEL, $message, $additional_values, null);
+    }
+
+    function send($receiver, $message, $additional_values = null, $additional_parameters = null) {
+        if(!$receiver) {
+            Logger::error("Receiver not set", __FILE__, $this);
+            return false;
+        }
+        if($message === null) {
+            Logger::info("Message is null", __FILE__, $this);
+            return false;
+        }
+
         $hydration_values = array(
-            '%FULL_NAME%' => $this->get_message()->get_full_sender_name(),
-            '%GROUP_NAME%' => $this->get_group_name()
+            '%FIRST_NAME%' => $this->get_message()->get_sender_first_name(),
+            '%FULL_NAME%' => $this->get_message()->get_sender_full_name()
         );
 
         $hydrated = hydrate($message, unite_arrays($hydration_values, $additional_values));
 
         return telegram_send_message(
-            CHAT_CHANNEL,
+            $this->get_telegram_chat_id(),
             $hydrated,
-            array(
-                'parse_mode' => 'Markdown',
-                'disable_web_page_preview' => true
-            )
+            unite_arrays(array(
+                'parse_mode' => 'HTML',
+                'disable_web_page_preview' => true,
+                // "Hide keyboard" is added by default to all messages because
+                // of a bug in Telegram that doesn't hide "one-time" keyboards after use
+                'reply_markup' => array(
+                    'hide_keyboard' => true
+                )
+            ), $additional_parameters)
         );
     }
 
@@ -138,32 +121,46 @@ class Context {
      * Refreshes information about the context from the DB.
      */
     function refresh() {
-        $identity = db_row_query("SELECT `id`, `full_name`, `is_admin` FROM `identities` WHERE `telegram_id` = {$this->get_user_id()}");
+        $identity = db_row_query("SELECT `id`, `full_name`, `is_admin`, `state` FROM `identities` WHERE `telegram_id` = {$this->get_user_id()}");
         if(!$identity) {
-            //No identity registered
+            // No identity registered
             return;
         }
 
-        $this->group_id = intval($identity[0]);
+        $this->identity = intval($identity[0], 10);
         $this->is_admin = (bool)$identity[2];
+        $this->state = intval($identity[3], 10);
 
-        $state = db_row_query("SELECT `name`, `participants_count`, `state`, `track_id`, `track_index` FROM `status` WHERE `game_id` = " . CURRENT_GAME_ID . " AND `group_id` = {$this->group_id}");
-        if(!$state) {
-            //No registration
-            return;
-        }
+        db_perform_action("UPDATE `identities` SET `last_access` = NOW() WHERE `id` = {$this->identity}");
+    }
 
-        if($state[0]) {
-            $this->group_name = $state[0];
+    /**
+     * Register identity for current user.
+     */
+    function register() {
+        Logger::debug("Registering user identity", __FILE__, $this);
+
+        if(db_perform_action("INSERT INTO `identities` (`telegram_id`, `full_name`, `first_access`, `last_access`) VALUES({$this->get_user_id()}, '{$this->message->get_sender_full_name()}', NOW(), NOW())") === false) {
+            Logger::error("Failed to register group status for user #{$this->get_user_id()}", __FILE__, $this);
+            return false;
         }
         else {
-            $this->group_name = TEXT_UNNAMED_GROUP;
+            $this->refresh();
+
+            return true;
         }
-        $this->group_state = intval($state[2]);
-        if($state[3] !== null) {
-            $this->group_track_id = intval($state[3]);
+    }
+
+    function set_state($new_state) {
+        Logger::info("Updating state to {$new_state}", __FILE__, $this);
+
+        if(db_perform_action("UPDATE `identities` SET `state` = {$new_state} WHERE `id` = {$this->identity}") === false) {
+            Logger::error("Failed to update state for user #{$this->get_user_id()}", __FILE__, $this);
+            return false;
         }
-        $this->group_track_index = intval($state[4]);
+
+        $this->state = $new_state;
+        return true;
     }
 
 }
