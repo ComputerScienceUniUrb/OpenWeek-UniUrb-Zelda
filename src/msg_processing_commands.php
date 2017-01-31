@@ -30,11 +30,14 @@ function switch_to_location($context, $payload) {
             db_perform_action("INSERT INTO `reached_locations` (`id`, `location_id`, `timestamp`) VALUES ({$context->get_identity()}, {$location_id}, NOW());");
 
             $context->reply(constant('TEXT_CMD_START_TARGET_' . $location_id));
-            $context->reply(constant('TEXT_CMD_START_TARGET_' . $location_id . '_QUESTION'), null, array(
-                'reply_markup' => array(
-                    'keyboard' => constant('TEXT_CMD_START_TARGET_' . $location_id . '_KEYBOARD')
-                )
-            ));
+            if(constant('TEXT_CMD_START_TARGET_' . $location_id . '_QUESTION') !== null) {
+                // If there is a question to be asked
+                $context->reply(constant('TEXT_CMD_START_TARGET_' . $location_id . '_QUESTION'), null, array(
+                    'reply_markup' => array(
+                        'keyboard' => constant('TEXT_CMD_START_TARGET_' . $location_id . '_KEYBOARD')
+                    )
+                ));
+            }
         }
         else {
             // Location already reached
