@@ -18,11 +18,12 @@ require_once('model/context.php');
  */
 function switch_to_location($context, $payload) {
     $location = db_row_query("SELECT l.`id`, l.`target_state`, (SELECT count(*) FROM `reached_locations` AS r WHERE r.`location_id` = l.`id` AND r.`id` = {$context->get_identity()}) AS reached FROM `locations` AS l WHERE `code` = '" . db_escape($payload) . "'");
+
     if($location !== null) {
         $location_id = intval($location[0]);
         $target_state = intval($location[1]);
 
-        if($location[2] == null) {
+        if($location[2] == 0) {
             // Location never reached
             $context->set_state($target_state);
 
