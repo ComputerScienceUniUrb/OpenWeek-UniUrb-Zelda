@@ -14,11 +14,23 @@ require_once('msg_processing_admin.php');
 require_once('msg_processing_commands.php');
 require_once('msg_processing_state.php');
 
+const STATE_NEW             = 0;    // registration started
+const STATE_1               = 10;   // first step
+const STATE_1_OK            = 11;   // first step ok
+const STATE_2               = 20;
+const STATE_2_OK            = 21;
+const STATE_3               = 30;
+const STATE_3_OK            = 31;
+const STATE_4               = 40;
+const STATE_4_OK            = 41;
+const STATE_5               = 50;
+const STATE_ARCHIVED        = 99;   // users from previous days
+
 //Needs some error checking here
 $in = new IncomingMessage($message);
 $context = new Context($in);
 
-Logger::debug("Current group state: {$context->get_group_state()}", __FILE__, $context);
+Logger::debug("User state: {$context->get_state()}", __FILE__, $context);
 
 if($in->is_group()) {
     // Group (TODO)
@@ -33,17 +45,18 @@ else if($in->is_private()) {
             }
         }
 
-        // Temp thinghie (deactivation notice)
-        $context->reply("Al momento non ci sono cacce al tesoro attive. Presto torneremo con altre novità, nel frattempo [leggi la storia di questo bot](http://informatica.uniurb.it/una-caccia-al-tesoro-guidata-da-un-bot/).\n_A presto!_\n\n🇬🇧 No treasure hunt game running at the moment. We’ll be back soon, in the meantime you can [read the story of this bot](http://informatica.uniurb.it/en/treasurehuntbot/).\n_Stay tuned!_");
-        return;
-
         // Base commands
         if(msg_processing_commands($context)) {
             return;
         }
 
+        if(!$context->is_registered()) {
+            $context->reply(TEXT_FAILURE_NOT_REGISTERED);
+            return;
+        }
+
         // Registration responses
-        if(msg_processing_handle_group_response($context)) {
+        if(msg_processing_handle_response($context)) {
             return;
         }
 
@@ -52,7 +65,7 @@ else if($in->is_private()) {
     }
     else if($in->is_photo()) {
         // Registration responses
-        if(msg_processing_handle_group_response($context)) {
+        if(msg_processing_handle_response($context)) {
             return;
         }
 

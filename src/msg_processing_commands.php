@@ -29,11 +29,11 @@ function msg_processing_commands($context) {
 
         return true;
     }
-    else if($text === '/start ' . CODE_REGISTER) {
+    else if($text === '/start register') {
         // Registration command
 
-        if(null === $context->get_group_state()) {
-            if(!bot_register_new_group($context)) {
+        if(!$context->is_registered()) {
+            if(!$context->register()) {
                 $context->reply(TEXT_FAILURE_GENERAL);
             }
             else {
@@ -50,75 +50,13 @@ function msg_processing_commands($context) {
 
         return true;
     }
-    else if($text === '/start ' . CODE_ACTIVATE) {
-        // Activation command
-
-        $result = bot_promote_to_active($context);
-        switch($result) {
-            case true:
-                $context->reply(TEXT_ADVANCEMENT_ACTIVATED);
-                break;
-
-            case 'not_found':
-                $context->reply(TEXT_FAILURE_GROUP_NOT_FOUND);
-                break;
-
-            case 'already_active':
-                $context->reply(TEXT_FAILURE_GROUP_ALREADY_ACTIVE);
-
-                msg_processing_handle_group_state($context);
-                break;
-
-            case 'invalid_state':
-                $context->reply(TEXT_FAILURE_GROUP_INVALID_STATE);
-
-                msg_processing_handle_group_state($context);
-                break;
-
-            case false:
-            default:
-                $context->reply(TEXT_FAILURE_GENERAL);
-                break;
-        }
-
-        return true;
-    }
-    else if($text === '/start ' . CODE_VICTORY) {
-        Logger::debug("Prize code scanned", __FILE__, $context);
-
-        if($context->get_group_state() === STATE_GAME_LAST_PUZ) {
-            $winning_group = bot_get_winning_group($context);
-            if($winning_group !== false) {
-                $context->reply(TEXT_CMD_START_PRIZE_TOOLATE, array(
-                    '%GROUP%' => $winning_group
-                ));
-            }
-            else {
-                bot_update_group_state($context, STATE_GAME_WON);
-
-                msg_processing_handle_group_state($context);
-
-                Logger::info("Group {$context->get_group_id()} has reached the prize and won", __FILE__, $context, true);
-
-                $context->channel(TEXT_GAME_WON_CHANNEL);
-            }
-        }
-        else {
-            $context->reply(TEXT_CMD_START_PRIZE_INVALID);
-
-            Logger::warning("Group {$context->get_group_id()} has reached the prize but is in state {$context->get_group_state()}", __FILE__, $context);
-        }
-
-        return true;
-    }
     else if(starts_with($text, '/start')) {
-        Logger::debug("Start command with payload");
-
         $payload = extract_command_payload($text);
+        Logger::debug("Start command with payload '{$payload}'");
 
         // Naked /start message
         if($payload === '') {
-            if(null !== $context->get_group_state()) {
+            if($context->is_registered()) {
                 $context->reply(TEXT_CMD_START_REGISTERED);
 
                 msg_processing_handle_group_state($context);
@@ -128,35 +66,32 @@ function msg_processing_commands($context) {
             }
         }
         // Secret location code
-        else if(mb_strlen($payload) === 16) {
+        else if(mb_strlen($payload) === 8) {
             Logger::debug("Treasure hunt code: '{$payload}'", __FILE__, $context);
 
-            $result = bot_reach_location($context, $payload);
+            $location = db_row_query("SELECT `id`, `target_state` FROM `locations` WHERE `code` = '" . db_escape($payload) . "'");
+            if($location !== null) {
+                $location_id = intval($location[0]);
+                $target_state = intval($location[1]);
 
-            if($result === false) {
-                $context->reply(TEXT_FAILURE_GENERAL);
-            }
-            else if($result === 'unexpected') {
-                $context->reply(TEXT_CMD_START_LOCATION_UNEXPECTED);
-            }
-            else if($result === 'wrong') {
-                $context->reply(TEXT_CMD_START_LOCATION_WRONG);
+                $context->set_state($target_state);
+
+                $context->reply(constant('TEXT_CMD_START_TARGET_' . $location_id));
+                $context->reply(constant('TEXT_CMD_START_TARGET_' . $location_id . '_QUESTION'), null, array(
+                    'reply_markup' => array(
+                        'keyboard' => constant('TEXT_CMD_START_TARGET_' . $location_id . '_KEYBOARD')
+                    )
+                ));
             }
             else {
-                $context->reply(TEXT_CMD_START_LOCATION_REACHED);
-
-                msg_processing_handle_group_state($context);
-
-                if($context->get_group_state() === STATE_GAME_LAST_PUZ) {
-                    //TODO warn others!
-                }
+                $context->reply(TEXT_CMD_START_UNKNOWN_PAYLOAD);
             }
         }
         // Something else (?)
         else {
             Logger::warning("Unsupported /start payload received: '{$payload}'", __FILE__, $context);
 
-            $context->reply(TEXT_CMD_START_WRONG_PAYLOAD);
+            $context->reply(TEXT_CMD_START_UNKNOWN_PAYLOAD);
         }
 
         return true;
