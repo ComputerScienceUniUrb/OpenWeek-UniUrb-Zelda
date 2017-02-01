@@ -67,7 +67,7 @@ function msg_processing_commands($context) {
 
         return true;
     }
-    else if(starts_with($text, '/reset')) {
+    else if(starts_with($text, '/reset') && ENABLE_RESET) {
         if($context->is_registered()) {
             db_perform_action("DELETE FROM `reached_locations` WHERE `id` = {$context->get_identity()}");
         }
