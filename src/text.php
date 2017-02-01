@@ -52,6 +52,8 @@ const TEXT_CMD_START_TARGET_2_CORRECT = "Complimenti, hai indovinato!! Gli iscri
 const TEXT_CMD_START_TARGET_2_WRONG = "Peccato non hai indovinato! Gli iscritti attuali sono molti di più. Sono addirittura più di 13.000. Pensa che il comune di Urbino ha circa 15.000 abitanti e quindi gli studenti dell’Università sono un numero quasi pari a quello degli abitanti. Questo significa che l’intera città è un vero e proprio campus universitario.";
 
 const TEXT_CMD_START_TARGET_3 = "Ciao, ti trovi di fronte al Teatro Sanzio e alle tue spalle puoi vedere la facciata del Palazzo Ducale con i suoi famosissimi Torricini. Cosa ne dici di scattare selfie con i tuoi compagni e di inviarmelo? Ci penserò io poi ad inoltrarlo a tutti gli altri partecipanti.";
+const TEXT_CMD_START_TARGET_3_NOT_PHOTO = "Inviami un tuo <i>selfie</i>, per favore.";
+const TEXT_CMD_START_TARGET_3_CHANNEL_CAPTION = "%FIRST_NAME% saluta dal selfie point!";
 
 const TEXT_CMD_START_TARGET_4 = "Eccoci arrivati al Collegio Tridente. Il prossimo passo sarà trovare la mensa e goderti una meritata pausa pranzo. Scendi al piano sottostante. Lì troverai quello che cerchi. Buon pranzo. Puoi utilizzare la pianta del collegio per orientarti…";
 const TEXT_CMD_START_TARGET_4_QUESTION = "Sai quanti sono i posti letto disponibili presso i collegi universitari?";
@@ -72,6 +74,14 @@ const TEXT_CMD_REGISTER_SCHOOL_OK = "Ok, quindi studi presso la scuola %SCHOOL_N
 // States
 const TEXT_STATE_NEW = "Per completare la registrazione, fornisci qui il <i>codice meccanografico</i> della tua scuola di provenienza.";
 const TEXT_STATE_REG_OK = "Quando raggiungi Urbino, scannerizza il <i>QR Code</i> che troverai a Borgo Mercatale o a Porta Santa Lucia. Ci vediamo lì!";
+const TEXT_STATE_1 = "Come primo passo dovrai raggiungere il <b>Polo Didattico Volponi</b> che si trova in via Saffi n. 15. Utilizza la mappa per raggiungere più facilmente la tua destinazione.";
+const TEXT_STATE_1_LOCATION = [ 43.722022, 12.636611 ];
+const TEXT_STATE_2 = "Sulla via della mensa, puoi passare al <i>selfie point</i> di fronte ai famosi Torricini del Palazzo Ducale di Urbino. Ti invio la posizione del punto da raggiungere.";
+const TEXT_STATE_2_LOCATION = [ 43.724226, 12.635721 ];
+const TEXT_STATE_3 = "Bella foto! Ora dirigiti ai collegi universitari per raggiungere la mensa.";
+const TEXT_STATE_3_LOCATION = [ 43.720846, 12.624561 ];
+const TEXT_STATE_4 = "Ora ci sposteremo nella parte più alta dei collegi universitari, il teatro del <b>Collegio La Vela</b>. Lì ti aspettano delle esibizioni delle associazioni studentesche per mostrarti uno spaccato di quelle che potrebbero essere le attività da svolgere ad Urbino nel tempo libero. Buon divertimento!";
+const TEXT_STATE_4_LOCATION = [ 43.717976, 12.626624 ];
 
 // Default response for anything else
 const TEXT_FALLBACK_RESPONSE = "Scusami, non ho capito cosa intendi. Usa i comandi /start o /help.";

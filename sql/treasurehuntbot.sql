@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jan 31, 2017 at 07:59 PM
+-- Generation Time: Feb 01, 2017 at 07:50 PM
 -- Server version: 5.5.53-0+deb8u1
 -- PHP Version: 5.6.27-0+deb8u1
 
@@ -53,8 +53,7 @@ INSERT INTO `locations` (`id`, `code`, `target_state`, `description`) VALUES
 (2, 'Q7zF0q0V', 20, 'Magistero'),
 (3, 'IZoJzRgJ', 30, 'Selfie point'),
 (4, 'vVVxASDS', 40, 'Mensa Tridente'),
-(5, 'GvL7tVCc', 50, 'Teatro La Vela'),
-(6, 'SjFyria2', 10, 'Porta Santa Lucia');
+(5, 'GvL7tVCc', 50, 'Teatro La Vela');
 
 -- --------------------------------------------------------
 
@@ -66,7 +65,8 @@ CREATE TABLE `reached_locations` (
   `id` int(10) UNSIGNED NOT NULL,
   `location_id` int(10) UNSIGNED NOT NULL,
   `timestamp` datetime NOT NULL,
-  `correct_answer` tinyint(1) NOT NULL DEFAULT '0'
+  `correct_answer` tinyint(1) NOT NULL DEFAULT '0',
+  `answer_timestamp` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -168,5 +168,5 @@ ALTER TABLE `identities`
 -- Constraints for table `reached_locations`
 --
 ALTER TABLE `reached_locations`
-  ADD CONSTRAINT `user_id` FOREIGN KEY (`id`) REFERENCES `identities` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `location_id` FOREIGN KEY (`location_id`) REFERENCES `locations` (`id`);
+  ADD CONSTRAINT `location_id` FOREIGN KEY (`location_id`) REFERENCES `locations` (`id`),
+  ADD CONSTRAINT `user_id` FOREIGN KEY (`id`) REFERENCES `identities` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
