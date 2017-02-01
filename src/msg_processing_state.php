@@ -30,7 +30,7 @@ function msg_processing_handle_state($context) {
     return false;
 }
 
-function process_response($context, $state, $response) {
+function process_response($context, $state, $input) {
     Logger::info("Response is {$input}", __FILE__, $context);
 
     if($input == constant("TEXT_CMD_START_TARGET_{$state}_RESPONSE")) {
@@ -58,8 +58,8 @@ function msg_processing_handle_response($context) {
             }
             else {
                 $context->reply(TEXT_CMD_REGISTER_SCHOOL_OK, array(
-                    '%SCHOOL_NAME%'  => $school[0],
-                    '%SCHOOL_PLACE%' => $school[1]
+                    '%SCHOOL_NAME%'  => ucwords($school[0], " \t\r\n\f\v'"),
+                    '%SCHOOL_PLACE%' => ucwords($school[1], " \t\r\n\f\v'")
                 ));
                 $context->set_state(STATE_REG_OK);
             }
@@ -82,7 +82,7 @@ function msg_processing_handle_response($context) {
 
         case STATE_4:
             $input = extract_number($context->get_response());
-            process_response($context, 1, $input);
+            process_response($context, 4, $input);
             return true;
 
         case STATE_5:
