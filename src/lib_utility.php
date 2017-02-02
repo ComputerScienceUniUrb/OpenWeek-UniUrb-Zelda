@@ -147,3 +147,10 @@ function hydrate($text, $map = null) {
     }
     return $text;
 }
+
+/**
+ * Converts a string to title casing.
+ */
+function title_case($string) {
+    return ucwords(mb_strtolower($string), " \t\r\n\f\v'.-");
+}

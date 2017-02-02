@@ -86,8 +86,8 @@ function msg_processing_handle_response($context) {
             }
             else {
                 $context->reply(TEXT_CMD_REGISTER_SCHOOL_OK, array(
-                    '%SCHOOL_NAME%'  => ucwords($school[0], " \t\r\n\f\v'"),
-                    '%SCHOOL_PLACE%' => ucwords($school[1], " \t\r\n\f\v'")
+                    '%SCHOOL_NAME%'  => title_case($school[0]),
+                    '%SCHOOL_PLACE%' => title_case($school[1])
                 ));
                 $context->set_state(STATE_REG_OK);
             }
