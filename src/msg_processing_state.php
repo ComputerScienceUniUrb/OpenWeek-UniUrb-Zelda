@@ -47,7 +47,13 @@ function msg_processing_handle_state($context) {
             return true;
 
         case STATE_5_OK:
-            // Final state
+            $context->reply(TEXT_STATE_5);
+            $context->set_state(STATE_ARCHIVED);
+            return true;
+
+        case STATE_ARCHIVED:
+            // Game is over for you
+            $context->reply(TEXT_STATE_ARCHIVED);
             return true;
     }
 
@@ -129,7 +135,9 @@ function msg_processing_handle_response($context) {
             return true;
 
         case STATE_5:
-            break;
+            $input = $context->get_response();
+            process_response($context, 5, $input);
+            return true;
     }
 
     return false;

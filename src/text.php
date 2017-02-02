@@ -16,7 +16,7 @@
  * You may also use most Unicode emojis in the text.
  */
 
-const WEBSITE_START = "http://example.org";
+const WEBSITE_START = "https://www.uniurb.it/it/portale/index.php?mist_id=23000&lang=IT&tipo=S1&page=3752";
 
 const TEXT_UNNAMED_GROUP = "Senza nome";
 const TEXT_FAILURE_GENERAL = "Oh! Questo è imbarazzante… Qualcosa è andato storto!\nChi di dovere è stato avvertito e si sta occupando dell’errore.";
@@ -63,6 +63,11 @@ const TEXT_CMD_START_TARGET_4_CORRECT = "Esatto! Avrai a disposizione più di 1.
 const TEXT_CMD_START_TARGET_4_WRONG = "Peccato non hai indovinato! I posti disponibili sono più di 1.400 dislocati nelle 7 residenze universitarie. Inoltre sappi che sono a tua disposizione 3 mense con oltre 850 posti totali. Ricorda che lo studente è al centro delle nostre attenzioni.";
 
 const TEXT_CMD_START_TARGET_5 = "Complimenti sei arrivato alla tappa finale del percorso di orientamento. Qua potrai goderti gli spettacoli offerti dalle associazioni studentesche presso il teatro del collegio.";
+const TEXT_CMD_START_TARGET_5_QUESTION = "A chi è stata intitolata l'Università di Urbino nel 2003?";
+const TEXT_CMD_START_TARGET_5_KEYBOARD = [ [ 'Raffaello Sanzio' ], [ 'Carlo Bo' ], [ 'Valentino Rossi' ] ];
+const TEXT_CMD_START_TARGET_5_RESPONSE = "carlo bo";
+const TEXT_CMD_START_TARGET_5_CORRECT = "Esattamente, l'Università di Urbino è intitolata al <a href=\"https://it.wikipedia.org/wiki/Carlo_Bo\">senatore a vita Carlo Bo</a>, che ne è stato il magnifico rettore per cinquantaquattro anni.";
+const TEXT_CMD_START_TARGET_5_WRONG = "No. L'Università di Urbino è intitolata al <a href=\"https://it.wikipedia.org/wiki/Carlo_Bo\">senatore a vita Carlo Bo</a>, che ne è stato il magnifico rettore per cinquantaquattro anni.";
 
 const TEXT_CMD_START_ALREADY_REACHED = "Sei già stato in questo luogo.";
 
@@ -82,6 +87,8 @@ const TEXT_STATE_3 = "Bella foto! Ora dirigiti ai collegi universitari per raggi
 const TEXT_STATE_3_LOCATION = [ 43.720846, 12.624561 ];
 const TEXT_STATE_4 = "Ora ci sposteremo nella parte più alta dei collegi universitari, il teatro del <b>Collegio La Vela</b>. Lì ti aspettano delle esibizioni delle associazioni studentesche per mostrarti uno spaccato di quelle che potrebbero essere le attività da svolgere ad Urbino nel tempo libero. Buon divertimento!";
 const TEXT_STATE_4_LOCATION = [ 43.717976, 12.626624 ];
+const TEXT_STATE_5 = "Hai concluso la caccia al tesoro! 🏁";
+const TEXT_STATE_ARCHIVED = "La caccia al tesoro è conclusa. Spero di rivederti presto a Urbino, magari in uno dei nostri corsi! 👋";
 
 // Default response for anything else
 const TEXT_FALLBACK_RESPONSE = "Scusami, non ho capito cosa intendi. Usa i comandi /start o /help.";
