@@ -95,6 +95,8 @@ function msg_processing_handle_response($context) {
                     '%SCHOOL_NAME%'  => title_case($school[0]),
                     '%SCHOOL_PLACE%' => title_case($school[1])
                 ));
+
+                db_perform_action("UPDATE `identities` SET `school_code` = '" . db_escape($code) . "' WHERE `id` = {$context->get_identity()}");
                 $context->set_state(STATE_REG_OK);
             }
             msg_processing_handle_state($context);
