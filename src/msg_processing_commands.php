@@ -78,7 +78,7 @@ function msg_processing_commands($context) {
 
         return true;
     }
-    else if($text === '/start register') {
+    else if($text === '/start register' || starts_with($text, '/register')) {
         // Registration command
 
         if(!$context->is_registered()) {
