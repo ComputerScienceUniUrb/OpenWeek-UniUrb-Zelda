@@ -65,7 +65,7 @@ const TEXT_CMD_START_TARGET_4_WRONG = "Peccato non hai indovinato! I posti dispo
 const TEXT_CMD_START_TARGET_5 = "Complimenti sei arrivato alla tappa finale del percorso di orientamento. Qua potrai goderti gli spettacoli offerti dalle associazioni studentesche presso il teatro del collegio.";
 const TEXT_CMD_START_TARGET_5_QUESTION = "Sai chi è stato il famoso architetto che ha progettato i collegi universitari di Urbino?";
 const TEXT_CMD_START_TARGET_5_KEYBOARD = [ [ 'Giancarlo De Carlo' ], [ 'Massimiliano Fuksas' ], [ 'Renzo Piano' ] ];
-const TEXT_CMD_START_TARGET_5_RESPONSE = "giancarlo de carlo";
+const TEXT_CMD_START_TARGET_5_RESPONSE = [ "giancarlo de carlo", "de carlo", "carlo", "giancarlo", "decarlo" ];
 const TEXT_CMD_START_TARGET_5_CORRECT = "Esattamente! I collegi universitari ed alcuni interventi nel centro storico sono stati progettati dall'architetto Giancarlo De Carlo. È stato tra i primi a sperimentare ed applicare in architettura la partecipazione da parte degli utenti nelle fasi di progettazione.";
 const TEXT_CMD_START_TARGET_5_WRONG = "No. I collegi universitari ed alcuni interventi nel centro storico sono stati progettati dall'architetto Giancarlo De Carlo. È stato tra i primi a sperimentare ed applicare in architettura la partecipazione da parte degli utenti nelle fasi di progettazione.";
 

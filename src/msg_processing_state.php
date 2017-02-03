@@ -63,7 +63,19 @@ function msg_processing_handle_state($context) {
 function process_response($context, $state, $input) {
     Logger::info("Response is {$input}", __FILE__, $context);
 
-    $is_correct = ($input == constant("TEXT_CMD_START_TARGET_{$state}_RESPONSE"));
+    $ok_value = constant("TEXT_CMD_START_TARGET_{$state}_RESPONSE");
+    if(is_array($ok_value)) {
+        $is_correct = false;
+        foreach($ok_value as $val) {
+            if($input == $val) {
+                $is_correct = true;
+                break;
+            }
+        }
+    }
+    else {
+        $is_correct = ($input == $ok_value);
+    }
     $context->reply($is_correct ? constant("TEXT_CMD_START_TARGET_{$state}_CORRECT") : constant("TEXT_CMD_START_TARGET_{$state}_WRONG"));
 
     mark_response_and_proceed($context, $state, $is_correct);
