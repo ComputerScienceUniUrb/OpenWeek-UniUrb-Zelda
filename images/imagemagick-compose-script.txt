@@ -1,0 +1,1 @@
+convert <selfie.jpg> -resize 1600x1600^ -gravity center -crop 1600x1600+0+0 +repage <badge.png> -composite <output.jpg>
