@@ -32,9 +32,12 @@ function switch_to_location($context, $payload) {
             $context->reply(constant('TEXT_CMD_START_TARGET_' . $location_id));
             if(defined('TEXT_CMD_START_TARGET_' . $location_id . '_QUESTION')) {
                 // If there is a question to be asked
+                $keyboard_array = constant('TEXT_CMD_START_TARGET_' . $location_id . '_KEYBOARD');
+                shuffle($keyboard_array);
+
                 $context->reply(constant('TEXT_CMD_START_TARGET_' . $location_id . '_QUESTION'), null, array(
                     'reply_markup' => array(
-                        'keyboard' => constant('TEXT_CMD_START_TARGET_' . $location_id . '_KEYBOARD')
+                        'keyboard' => $keyboard_array
                     )
                 ));
             }
