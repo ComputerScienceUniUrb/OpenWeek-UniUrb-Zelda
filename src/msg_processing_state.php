@@ -47,7 +47,33 @@ function msg_processing_handle_state($context) {
             return true;
 
         case STATE_5_OK:
-            $context->reply(TEXT_STATE_5);
+            $total_steps = db_scalar_query("SELECT count(*) as `total` FROM `reached_locations` WHERE `id` = {$context->get_identity()}");
+            $total_answers = db_scalar_query("SELECT sum(`correct_answer`) AS `answers` FROM `reached_locations` WHERE `id` = {$context->get_identity()} AND `location_id` != 3");
+            $selfie_exists = file_exists("../badges/{$context->get_identity()}.jpg");
+
+            $reply = implode('', array(
+                TEXT_STATE_5,
+                TEXT_STATE_5_RESULTS_1,
+                ($total_steps <= 1) ? TEXT_STATE_5_RESULTS_2_SING : TEXT_STATE_5_RESULTS_2_PLUR,
+                TEXT_STATE_5_RESULTS_3,
+                (($total_answers == 0) ? TEXT_STATE_5_RESULTS_4_NONE :
+                    (($total_answers == 1) ? TEXT_STATE_5_RESULTS_4_SING :
+                        (($total_answers < 4) ? TEXT_STATE_5_RESULTS_4_PLUR : TEXT_STATE_5_RESULTS_4_ALL)
+                    )
+                ),
+                ($selfie_exists ? TEXT_STATE_5_RESULTS_5 : ''),
+                TEXT_STATE_5_RESULTS_6
+            ));
+            $context->reply($reply, array(
+                '%REACHED_LOCATIONS%' => $total_steps,
+                '%CORRECT_ANSWERS%'   => $total_answers
+            ));
+
+            if($selfie_exists) {
+                // Badge was generated
+                telegram_send_photo($context->get_chat_id(), "../badges/{$context->get_identity()}.jpg", TEXT_STATE_5_BADGE_CAPTION);
+            }
+
             $context->set_state(STATE_ARCHIVED);
             return true;
 
@@ -132,9 +158,9 @@ function msg_processing_handle_response($context) {
                 $file_info = telegram_get_file_info($context->get_message()->get_photo_large_id());
                 telegram_download_file($file_info['file_path'], "../selfies/{$context->get_identity()}.jpg");
 
-                telegram_send_photo(CHAT_CHANNEL, $file_info['file_id'], hydrate(TEXT_CMD_START_TARGET_3_CHANNEL_CAPTION, array(
-                    '%FIRST_NAME%' => $context->get_message()->get_sender_first_name()
-                )));
+                // Background process photo to produce badge
+                $rootdir = realpath(dirname(__FILE__) . '/..');
+                exec("convert {$rootdir}/selfies/{$context->get_identity()}.jpg -resize 1600x1600^ -gravity center -crop 1600x1600+0+0 +repage {$rootdir}/images/badge.png -composite {$rootdir}/badges/{$context->get_identity()}.jpg > {$rootdir}/badges/{$context->get_identity()}.jpg.log");
 
                 mark_response_and_proceed($context, 3, true);
             }

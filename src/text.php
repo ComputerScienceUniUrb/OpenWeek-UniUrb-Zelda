@@ -87,7 +87,18 @@ const TEXT_STATE_3 = "Bella foto! Ora dirigiti ai collegi universitari per raggi
 const TEXT_STATE_3_LOCATION = [ 43.720846, 12.624561 ];
 const TEXT_STATE_4 = "Ora ci sposteremo nella parte più alta dei collegi universitari, il teatro del <b>Collegio La Vela</b>. Lì ti aspettano delle esibizioni delle associazioni studentesche per mostrarti uno spaccato di quelle che potrebbero essere le attività da svolgere ad Urbino nel tempo libero. Buon divertimento!";
 const TEXT_STATE_4_LOCATION = [ 43.717976, 12.626624 ];
-const TEXT_STATE_5 = "Hai concluso la caccia al tesoro! 🏁";
+const TEXT_STATE_5 = "Hai concluso la caccia al tesoro! 🏁\n";
+const TEXT_STATE_5_RESULTS_1 = "Durante il tragitto hai raggiunto ";
+const TEXT_STATE_5_RESULTS_2_SING = "solo una tappa";
+const TEXT_STATE_5_RESULTS_2_PLUR = "<b>%REACHED_LOCATIONS%</b> tappe";
+const TEXT_STATE_5_RESULTS_3 = ", rispondendo correttamente a";
+const TEXT_STATE_5_RESULTS_4_NONE = " 0 domande (peccato).";
+const TEXT_STATE_5_RESULTS_4_SING = "d <b>una</b> domanda.";
+const TEXT_STATE_5_RESULTS_4_PLUR = " <b>%CORRECT_ANSWERS%</b> domande!";
+const TEXT_STATE_5_RESULTS_4_ALL  = " <b>tutte</b> le domande! 🏆";
+const TEXT_STATE_5_RESULTS_5 = "Siccome mi hai inviato il tuo selfie, posso ricompensarti per la partecipazione con un distintivo. 🏅";
+const TEXT_STATE_5_RESULTS_6 = "\nÈ stato un piacere accompagnarti durante questa giornata. Spero di trovarti di nuovo a Urbino, magari iscritto ad uno dei nostri corsi! 👋";
+const TEXT_STATE_5_BADGE_CAPTION = "Il tuo distintivo per la partecipazione all'Open Week!";
 const TEXT_STATE_ARCHIVED = "La caccia al tesoro è conclusa. Spero di rivederti presto a Urbino, magari in uno dei nostri corsi! 👋";
 
 // Default response for anything else
