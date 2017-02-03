@@ -63,11 +63,11 @@ const TEXT_CMD_START_TARGET_4_CORRECT = "Esatto! Avrai a disposizione più di 1.
 const TEXT_CMD_START_TARGET_4_WRONG = "Peccato non hai indovinato! I posti disponibili sono più di 1.400 dislocati nelle 7 residenze universitarie. Inoltre sappi che sono a tua disposizione 3 mense con oltre 850 posti totali. Ricorda che lo studente è al centro delle nostre attenzioni.";
 
 const TEXT_CMD_START_TARGET_5 = "Complimenti sei arrivato alla tappa finale del percorso di orientamento. Qua potrai goderti gli spettacoli offerti dalle associazioni studentesche presso il teatro del collegio.";
-const TEXT_CMD_START_TARGET_5_QUESTION = "A chi è stata intitolata l'Università di Urbino nel 2003?";
-const TEXT_CMD_START_TARGET_5_KEYBOARD = [ [ 'Raffaello Sanzio' ], [ 'Carlo Bo' ], [ 'Valentino Rossi' ] ];
-const TEXT_CMD_START_TARGET_5_RESPONSE = "carlo bo";
-const TEXT_CMD_START_TARGET_5_CORRECT = "Esattamente, l'Università di Urbino è intitolata al <a href=\"https://it.wikipedia.org/wiki/Carlo_Bo\">senatore a vita Carlo Bo</a>, che ne è stato il magnifico rettore per cinquantaquattro anni.";
-const TEXT_CMD_START_TARGET_5_WRONG = "No. L'Università di Urbino è intitolata al <a href=\"https://it.wikipedia.org/wiki/Carlo_Bo\">senatore a vita Carlo Bo</a>, che ne è stato il magnifico rettore per cinquantaquattro anni.";
+const TEXT_CMD_START_TARGET_5_QUESTION = "Sai chi è stato il famoso architetto che ha progettato i collegi universitari di Urbino?";
+const TEXT_CMD_START_TARGET_5_KEYBOARD = [ [ 'Giancarlo De Carlo' ], [ 'Massimiliano Fuksas' ], [ 'Renzo Piano' ] ];
+const TEXT_CMD_START_TARGET_5_RESPONSE = "giancarlo de carlo";
+const TEXT_CMD_START_TARGET_5_CORRECT = "Esattamente! I collegi universitari ed alcuni interventi nel centro storico sono stati progettati dall'architetto Giancarlo De Carlo. È stato tra i primi a sperimentare ed applicare in architettura la partecipazione da parte degli utenti nelle fasi di progettazione.";
+const TEXT_CMD_START_TARGET_5_WRONG = "No. I collegi universitari ed alcuni interventi nel centro storico sono stati progettati dall'architetto Giancarlo De Carlo. È stato tra i primi a sperimentare ed applicare in architettura la partecipazione da parte degli utenti nelle fasi di progettazione.";
 
 const TEXT_CMD_START_ALREADY_REACHED = "Sei già stato in questo luogo.";
 
