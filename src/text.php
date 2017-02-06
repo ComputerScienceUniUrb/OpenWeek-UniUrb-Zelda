@@ -37,7 +37,7 @@ const TEXT_CMD_START_REGISTERED = "Bentornato, %FULL_NAME%! Questo è il bot ded
 
 const TEXT_CMD_START_UNKNOWN_PAYLOAD = "Non ho capito… Forse hai scritto a mano un link? Ti prego di usare i link contenuti nei <i>QR Code</i> così come sono.";
 
-const TEXT_CMD_START_TARGET_1 = "Benvenuto ad Urbino, io sono Zelda, il bot dell’Università degli Studi di Urbino “Carlo Bo” e ti guiderò alla scoperta dell’Università durante questa giornata di orientamento. Sono stato progettato e sviluppato da docenti e da ex-studenti del <a href=\"http://informatica.uniurb.it\">Corso di Laurea di Informatica Applicata</a> di questa Università.";
+const TEXT_CMD_START_TARGET_1 = "Benvenuto ad Urbino!\nIo sono Zelda, il bot dell’Università degli Studi di Urbino “Carlo Bo” e ti guiderò alla scoperta dell’Università durante questa <b>giornata di orientamento</b>. Sono stato progettato e sviluppato da docenti e da ex-studenti del <a href=\"http://informatica.uniurb.it\">Corso di Laurea di Informatica Applicata</a> di questa Università. (Ricordati di seguire il canale Telegram @zeldauniurb per ricevere aggiornamenti. 📢)";
 const TEXT_CMD_START_TARGET_1_QUESTION = "Sai in che anno è stata fondata L’Università degli Studi di Urbino “Carlo Bo”?";
 const TEXT_CMD_START_TARGET_1_KEYBOARD = [ [ 'Nel 1506' ], [ 'Nel 1706' ], [ 'Nel 1906' ] ];
 const TEXT_CMD_START_TARGET_1_RESPONSE = 1506;
@@ -71,13 +71,13 @@ const TEXT_CMD_START_TARGET_5_WRONG = "No. I collegi universitari ed alcuni inte
 const TEXT_CMD_START_ALREADY_REACHED = "Sei già stato in questo luogo.";
 
 // Commands
-const TEXT_CMD_REGISTER_CONFIRM = "Ciao, %FULL_NAME%! Benvenuto al bot dell’<b>Open Week</b> presso l’Università di Urbino “Carlo Bo”. 🎉";
+const TEXT_CMD_REGISTER_CONFIRM = "Ciao, %FULL_NAME%! Benvenuto al bot dell’<b>Open Week</b> presso l’<b>Università di Urbino “Carlo Bo”</b>. 🎉";
 const TEXT_CMD_REGISTER_REGISTERED = "Risulti già registrato. 👍";
 const TEXT_CMD_REGISTER_SCHOOL_OK = "Ok, quindi studi presso la scuola %SCHOOL_NAME% di %SCHOOL_PLACE%.";
 
 // States
 const TEXT_STATE_NEW = "Per completare la registrazione, scrivi qui il <i>codice meccanografico</i> della tua scuola di provenienza. (Si tratta di un codice alfanumerico a 10 caratteri.)";
-const TEXT_STATE_REG_OK = "Quando raggiungi Urbino, scannerizza il <i>QR Code</i> che troverai a <b>Borgo Mercatale</b> o a <b>Porta Santa Lucia</b>. Ci vediamo lì!\nNel frattempo puoi iscriverti al canale @zeldauniurb per ricevere aggiornamenti. 📢";
+const TEXT_STATE_REG_OK = "Quando raggiungi Urbino, scannerizza il <i>QR Code</i> che troverai a <b>Borgo Mercatale</b> o a <b>Porta Santa Lucia</b>. Ci vediamo lì!\nNel frattempo puoi iscriverti al canale Telegram @zeldauniurb per ricevere aggiornamenti. 📢";
 const TEXT_STATE_1 = "Come primo passo dovrai raggiungere il <b>Polo Didattico Volponi</b>, che si trova in via Saffi n. 15. Utilizza la mappa per raggiungere più facilmente la tua destinazione.";
 const TEXT_STATE_1_LOCATION = [ 43.722022, 12.636611 ];
 const TEXT_STATE_2 = "Sulla via della mensa, puoi passare al <i>selfie point</i> di fronte ai famosi Torricini del Palazzo Ducale di Urbino. Ti invio la posizione del punto da raggiungere.";
@@ -95,8 +95,8 @@ const TEXT_STATE_5_RESULTS_4_NONE = " 0 domande (peccato).";
 const TEXT_STATE_5_RESULTS_4_SING = "d <b>una</b> domanda.";
 const TEXT_STATE_5_RESULTS_4_PLUR = " <b>%CORRECT_ANSWERS%</b> domande!";
 const TEXT_STATE_5_RESULTS_4_ALL  = " <b>tutte</b> le domande! 🏆";
-const TEXT_STATE_5_RESULTS_5 = "Siccome mi hai inviato il tuo selfie, posso ricompensarti per la partecipazione con un distintivo. 🏅";
-const TEXT_STATE_5_RESULTS_6 = "\nÈ stato un piacere accompagnarti durante questa giornata. Spero di trovarti di nuovo a Urbino, magari iscritto ad uno dei nostri corsi! 👋";
+const TEXT_STATE_5_RESULTS_5 = " Siccome mi hai inviato il tuo selfie, posso ricompensarti per la partecipazione con un distintivo. 🏅";
+const TEXT_STATE_5_RESULTS_6 = " È stato un piacere accompagnarti durante questa giornata. Spero di trovarti di nuovo a Urbino, magari iscritto ad uno dei nostri corsi! 👋";
 const TEXT_STATE_5_BADGE_CAPTION = "Il tuo distintivo per la partecipazione all’Open Week!";
 const TEXT_STATE_ARCHIVED = "La caccia al tesoro è conclusa. Spero di rivederti presto a Urbino, magari in uno dei nostri corsi! 👋";
 
