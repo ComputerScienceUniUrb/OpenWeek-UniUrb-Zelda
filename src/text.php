@@ -10,10 +10,6 @@
  * %FULL_NAME% User's full name
  * %GROUP_NAME% Group's name
  * Additional variables are available for some strings.
- *
- * Most messages (except photo captions, for instance) may
- * use Markdown encoding for formatting.
- * You may also use most Unicode emojis in the text.
  */
 
 const WEBSITE_START = "https://www.uniurb.it/it/portale/index.php?mist_id=23000&lang=IT&tipo=S1&page=3752";
@@ -98,15 +94,15 @@ const TEXT_STATE_5_RESULTS_4_ALL  = " <b>tutte</b> le domande! 🏆";
 const TEXT_STATE_5_RESULTS_5 = " Siccome mi hai inviato il tuo selfie, posso ricompensarti per la partecipazione con un distintivo. 🏅";
 const TEXT_STATE_5_RESULTS_6 = " È stato un piacere accompagnarti durante questa giornata. Spero di trovarti di nuovo a Urbino, magari iscritto ad uno dei nostri corsi! 👋";
 const TEXT_STATE_5_BADGE_CAPTION = "Il tuo distintivo per la partecipazione all’Open Week!";
-const TEXT_STATE_ARCHIVED = "La caccia al tesoro è conclusa. Spero di rivederti presto a Urbino, magari in uno dei nostri corsi! 👋";
+const TEXT_STATE_ARCHIVED = "La tua caccia al tesoro è conclusa. Spero di rivederti presto a Urbino, magari in uno dei nostri corsi! 👋";
 
 // Channel updates
-const TEXT_CHANNEL_ARRIVALS_START = "I primi visitatori della giornata stanno arrivando!";
-const TEXT_CHANNEL_ARRIVALS_UPDATE = "Finora ho registrato <b>%COUNT%</b> arrivi a Borgo Mercatale e a Porta Santa Lucia.";
+const TEXT_CHANNEL_ARRIVALS_START = "I primi visitatori della giornata stanno arrivando! 🎉";
+const TEXT_CHANNEL_ARRIVALS_UPDATE = "👥 Finora ho registrato <b>%COUNT%</b> arrivi a Borgo Mercatale e a Porta Santa Lucia.";
 const TEXT_CHANNEL_SELFIE_START = "Qualcuno sembra aver scoperto il <i>selfie point</i>!";
-const TEXT_CHANNEL_SELFIE_UPDATE = "Ho ricevuto <b>%COUNT%</b> vostre foto. Grazie!";
-const TEXT_CHANNEL_COMPLETE_START = "La nostra giornata insieme si sta concludendo.";
-const TEXT_CHANNEL_COMPLETE_UPDATE = "<b>%COUNT%</b> partecipanti hanno completato la caccia al tesoro!";
+const TEXT_CHANNEL_SELFIE_UPDATE = "🖼️ Ho ricevuto <b>%COUNT%</b> vostre foto. Grazie!";
+const TEXT_CHANNEL_COMPLETE_START = "La nostra giornata insieme si sta concludendo: i primi partecipanti hanno concluso la caccia al tesoro.";
+const TEXT_CHANNEL_COMPLETE_UPDATE = "🏁 <b>%COUNT%</b> partecipanti hanno completato la caccia al tesoro!";
 
 // Default response for anything else
 const TEXT_FALLBACK_RESPONSE = "Scusami, non ho capito cosa intendi. Usa i comandi /start o /help.";
