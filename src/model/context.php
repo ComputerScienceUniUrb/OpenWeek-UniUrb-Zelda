@@ -117,19 +117,22 @@ class Context {
         );
 
         $hydrated = hydrate($message, unite_arrays($hydration_values, $additional_values));
+        $default_parameters = array(
+            'parse_mode' => 'HTML',
+            'disable_web_page_preview' => true
+        );
+        if($receiver != CHAT_CHANNEL) {
+            // "Hide keyboard" is added by default to all messages because
+            // of a bug in Telegram that doesn't hide "one-time" keyboards after use
+            $default_parameters['reply_markup'] = array(
+                'hide_keyboard' => true
+            );
+        }
 
         return telegram_send_message(
             $receiver,
             $hydrated,
-            unite_arrays(array(
-                'parse_mode' => 'HTML',
-                'disable_web_page_preview' => true,
-                // "Hide keyboard" is added by default to all messages because
-                // of a bug in Telegram that doesn't hide "one-time" keyboards after use
-                'reply_markup' => array(
-                    'hide_keyboard' => true
-                )
-            ), $additional_parameters)
+            unite_arrays($default_parameters, $additional_parameters)
         );
     }
 
