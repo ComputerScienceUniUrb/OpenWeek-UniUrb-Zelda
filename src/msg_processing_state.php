@@ -51,6 +51,9 @@ function msg_processing_handle_state($context) {
             $total_answers = db_scalar_query("SELECT sum(`correct_answer`) AS `answers` FROM `reached_locations` WHERE `id` = {$context->get_identity()} AND `location_id` != 3");
             $selfie_exists = file_exists("../badges/{$context->get_identity()}.jpg");
 
+            // Update stats
+            $counter = update_daily_stat_counter($context, STATS_COMPLETED, TEXT_CHANNEL_COMPLETE_UPDATE, TEXT_CHANNEL_COMPLETE_START);
+
             $reply = implode('', array(
                 TEXT_STATE_5,
                 TEXT_STATE_5_RESULTS_1,
@@ -61,21 +64,20 @@ function msg_processing_handle_state($context) {
                         (($total_answers < 4) ? TEXT_STATE_5_RESULTS_4_PLUR : TEXT_STATE_5_RESULTS_4_ALL)
                     )
                 ),
+                ($counter == 1) ? TEXT_STATS_COMPLETE_FIRST : TEXT_STATS_COMPLETE_OTHER,
                 ($selfie_exists ? TEXT_STATE_5_RESULTS_5 : ''),
                 TEXT_STATE_5_RESULTS_6
             ));
             $context->reply($reply, array(
                 '%REACHED_LOCATIONS%' => $total_steps,
-                '%CORRECT_ANSWERS%'   => $total_answers
+                '%CORRECT_ANSWERS%'   => $total_answers,
+                '%COUNT%'             => $counter
             ));
 
             if($selfie_exists) {
                 // Badge was generated, send it back!
                 telegram_send_photo($context->get_chat_id(), "../badges/{$context->get_identity()}.jpg", TEXT_STATE_5_BADGE_CAPTION);
             }
-
-            // Update stats
-            update_daily_stat_counter($context, STATS_COMPLETED, TEXT_CHANNEL_COMPLETE_UPDATE, TEXT_CHANNEL_COMPLETE_START);
 
             $context->set_state(STATE_ARCHIVED);
             return true;
@@ -158,6 +160,13 @@ function msg_processing_handle_response($context) {
             if($context->get_message()->is_photo()) {
                 telegram_send_chat_action($context->get_chat_id());
 
+                // Update stats
+                $counter = update_daily_stat_counter($context, STATS_SELFIES, TEXT_CHANNEL_SELFIE_UPDATE, TEXT_CHANNEL_SELFIE_START);
+                $context->reply(
+                    ($counter == 1) ? TEXT_STATS_SELFIE_FIRST : TEXT_STATS_SELFIE_OTHER,
+                    array('%COUNT%' => $counter)
+                );
+
                 $file_info = telegram_get_file_info($context->get_message()->get_photo_large_id());
                 telegram_download_file($file_info['file_path'], "../selfies/{$context->get_identity()}.jpg");
 
@@ -166,9 +175,6 @@ function msg_processing_handle_response($context) {
                 exec("convert {$rootdir}/selfies/{$context->get_identity()}.jpg -resize 1600x1600^ -gravity center -crop 1600x1600+0+0 +repage {$rootdir}/images/badge.png -composite {$rootdir}/badges/{$context->get_identity()}.jpg > {$rootdir}/badges/{$context->get_identity()}.jpg.log");
 
                 mark_response_and_proceed($context, 3, true);
-
-                // Update stats
-                update_daily_stat_counter($context, STATS_SELFIES, TEXT_CHANNEL_SELFIE_UPDATE, TEXT_CHANNEL_SELFIE_START);
             }
             else {
                 $context->reply(TEXT_CMD_START_TARGET_3_NOT_PHOTO);

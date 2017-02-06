@@ -30,6 +30,17 @@ function switch_to_location($context, $payload) {
             db_perform_action("INSERT INTO `reached_locations` (`id`, `location_id`, `timestamp`) VALUES ({$context->get_identity()}, {$location_id}, NOW());");
 
             $context->reply(constant('TEXT_CMD_START_TARGET_' . $location_id));
+
+            if($location_id == 1) {
+                // Special handling of first location
+                $counter = update_daily_stat_counter($context, STATS_PARTICIPANTS, TEXT_CHANNEL_ARRIVALS_UPDATE, TEXT_CHANNEL_ARRIVALS_START);
+
+                $context->reply(
+                    ($counter == 1) ? TEXT_STATS_ARRIVALS_FIRST : TEXT_STATS_ARRIVALS_OTHER,
+                    array('%COUNT%' => $counter)
+                );
+            }
+
             if(defined('TEXT_CMD_START_TARGET_' . $location_id . '_QUESTION')) {
                 // If there is a question to be asked
                 $keyboard_array = constant('TEXT_CMD_START_TARGET_' . $location_id . '_KEYBOARD');
@@ -40,11 +51,6 @@ function switch_to_location($context, $payload) {
                         'keyboard' => $keyboard_array
                     )
                 ));
-            }
-
-            if($location_id == 1) {
-                // Special handling of first location
-                update_daily_stat_counter($context, STATS_PARTICIPANTS, TEXT_CHANNEL_ARRIVALS_UPDATE, TEXT_CHANNEL_ARRIVALS_START);
             }
         }
         else {

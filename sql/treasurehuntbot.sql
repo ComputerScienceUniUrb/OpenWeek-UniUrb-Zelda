@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Feb 01, 2017 at 07:50 PM
+-- Generation Time: Feb 06, 2017 at 07:38 PM
 -- Server version: 5.5.53-0+deb8u1
 -- PHP Version: 5.6.27-0+deb8u1
 
@@ -104,7 +104,8 @@ CREATE TABLE `schools` (
 CREATE TABLE `stats` (
   `type` smallint(5) UNSIGNED NOT NULL,
   `date` date NOT NULL,
-  `message_id` int(10) UNSIGNED NOT NULL
+  `message_id` int(10) UNSIGNED NOT NULL,
+  `counter` int(10) UNSIGNED NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -153,7 +154,7 @@ ALTER TABLE `stats`
 -- AUTO_INCREMENT for table `identities`
 --
 ALTER TABLE `identities`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'Internal ID', AUTO_INCREMENT=79;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'Internal ID';
 --
 -- Constraints for dumped tables
 --

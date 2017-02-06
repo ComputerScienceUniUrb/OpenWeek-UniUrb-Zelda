@@ -13,6 +13,10 @@ const STATS_PARTICIPANTS        = 1;
 const STATS_SELFIES             = 2;
 const STATS_COMPLETED           = 3;
 
+/**
+ * Update a daily stats counter.
+ * @return Counter value.
+ */
 function update_daily_stat_counter($context, $stat_type, $text, $text_if_first) {
     $stats_row = db_row_query("SELECT `message_id`, `counter` FROM `stats` WHERE `type` = {$stat_type} AND `date` = CURDATE()");
     if($stats_row == null) {
@@ -26,6 +30,8 @@ function update_daily_stat_counter($context, $stat_type, $text, $text_if_first) 
 
         // Store message for next update
         db_perform_action("INSERT INTO `stats` (`type`, `date`, `message_id`, `counter`) VALUES({$stat_type}, CURDATE(), {$message_id}, 1)");
+
+        return 1;
     }
     else {
         $message_id = intval($stats_row[0]);
@@ -40,5 +46,7 @@ function update_daily_stat_counter($context, $stat_type, $text, $text_if_first) 
         ));
 
         db_perform_action("UPDATE `stats` SET `counter` = `counter` + 1 WHERE `type` = {$stat_type} AND `date` = CURDATE()");
+
+        return $counter;
     }
 }

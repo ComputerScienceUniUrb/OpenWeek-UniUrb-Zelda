@@ -78,7 +78,7 @@ const TEXT_STATE_1 = "Come primo passo dovrai raggiungere il <b>Polo Didattico V
 const TEXT_STATE_1_LOCATION = [ 43.722022, 12.636611 ];
 const TEXT_STATE_2 = "Sulla via della mensa, puoi passare al <i>selfie point</i> di fronte ai famosi Torricini del Palazzo Ducale di Urbino. Ti invio la posizione del punto da raggiungere.";
 const TEXT_STATE_2_LOCATION = [ 43.724226, 12.635721 ];
-const TEXT_STATE_3 = "Foto ricevuta! Ora dirigiti ai collegi universitari per raggiungere la mensa.";
+const TEXT_STATE_3 = "Ora dirigiti ai collegi universitari per raggiungere la mensa.";
 const TEXT_STATE_3_LOCATION = [ 43.720846, 12.624561 ];
 const TEXT_STATE_4 = "Ora ci sposteremo nella parte più alta dei collegi universitari, il teatro del <b>Collegio La Vela</b>. Lì ti aspettano delle esibizioni delle associazioni studentesche per mostrarti uno spaccato di quelle che potrebbero essere le attività da svolgere ad Urbino nel tempo libero. Buon divertimento!";
 const TEXT_STATE_4_LOCATION = [ 43.717976, 12.626624 ];
@@ -88,8 +88,8 @@ const TEXT_STATE_5_RESULTS_2_SING = "solo una tappa";
 const TEXT_STATE_5_RESULTS_2_PLUR = "<b>%REACHED_LOCATIONS%</b> tappe";
 const TEXT_STATE_5_RESULTS_3 = ", rispondendo correttamente a";
 const TEXT_STATE_5_RESULTS_4_NONE = " 0 domande (peccato).";
-const TEXT_STATE_5_RESULTS_4_SING = "d <b>una</b> domanda.";
-const TEXT_STATE_5_RESULTS_4_PLUR = " <b>%CORRECT_ANSWERS%</b> domande!";
+const TEXT_STATE_5_RESULTS_4_SING = "d <b>una</b> domanda su 4.";
+const TEXT_STATE_5_RESULTS_4_PLUR = " <b>%CORRECT_ANSWERS%</b> domande su 4!";
 const TEXT_STATE_5_RESULTS_4_ALL  = " <b>tutte</b> le domande! 🏆";
 const TEXT_STATE_5_RESULTS_5 = " Siccome mi hai inviato il tuo selfie, posso ricompensarti per la partecipazione con un distintivo. 🏅";
 const TEXT_STATE_5_RESULTS_6 = " È stato un piacere accompagnarti durante questa giornata. Spero di trovarti di nuovo a Urbino, magari iscritto ad uno dei nostri corsi! 👋";
@@ -103,6 +103,14 @@ const TEXT_CHANNEL_SELFIE_START = "Qualcuno sembra aver scoperto il <i>selfie po
 const TEXT_CHANNEL_SELFIE_UPDATE = "🖼️ Ho ricevuto <b>%COUNT%</b> vostre foto. Grazie!";
 const TEXT_CHANNEL_COMPLETE_START = "La nostra giornata insieme si sta concludendo: i primi partecipanti hanno concluso la caccia al tesoro.";
 const TEXT_CHANNEL_COMPLETE_UPDATE = "🏁 <b>%COUNT%</b> partecipanti hanno completato la caccia al tesoro!";
+
+// Stat messages
+const TEXT_STATS_ARRIVALS_FIRST = "Sei il primo partecipante a raggiungere il punto d'inizio!";
+const TEXT_STATS_ARRIVALS_OTHER = "Sei il %COUNT%° partecipante alla caccia al tesoro di oggi!";
+const TEXT_STATS_SELFIE_FIRST = "Questo è il primo selfie che ricevo oggi, fantastico!";
+const TEXT_STATS_SELFIE_OTHER = "Questo è il %COUNT%° selfie che ricevo oggi!";
+const TEXT_STATS_COMPLETE_FIRST = " (Tra l'altro, sei il primo partecipante a concludere la caccia al tesoro oggi!)";
+const TEXT_STATS_COMPLETE_OTHER = " (Tra l'altro, sei il %COUNT%° partecipante a concludere la caccia al tesoro oggi.)";
 
 // Default response for anything else
 const TEXT_FALLBACK_RESPONSE = "Scusami, non ho capito cosa intendi. Usa i comandi /start o /help.";
