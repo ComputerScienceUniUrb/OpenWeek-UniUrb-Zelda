@@ -41,6 +41,11 @@ function switch_to_location($context, $payload) {
                     )
                 ));
             }
+
+            if($location_id == 1) {
+                // Special handling of first location
+                update_daily_stat_counter($context, STATS_PARTICIPANTS, TEXT_CHANNEL_ARRIVALS_UPDATE, TEXT_CHANNEL_ARRIVALS_START);
+            }
         }
         else {
             // Location already reached

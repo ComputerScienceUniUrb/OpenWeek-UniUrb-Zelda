@@ -10,6 +10,7 @@
 
 require_once('text.php');
 require_once('model/context.php');
+require_once('daily_stats.php');
 require_once('msg_processing_admin.php');
 require_once('msg_processing_commands.php');
 require_once('msg_processing_state.php');

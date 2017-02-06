@@ -70,9 +70,12 @@ function msg_processing_handle_state($context) {
             ));
 
             if($selfie_exists) {
-                // Badge was generated
+                // Badge was generated, send it back!
                 telegram_send_photo($context->get_chat_id(), "../badges/{$context->get_identity()}.jpg", TEXT_STATE_5_BADGE_CAPTION);
             }
+
+            // Update stats
+            update_daily_stat_counter($context, STATS_COMPLETED, TEXT_CHANNEL_COMPLETE_UPDATE, TEXT_CHANNEL_COMPLETE_START);
 
             $context->set_state(STATE_ARCHIVED);
             return true;
@@ -163,6 +166,9 @@ function msg_processing_handle_response($context) {
                 exec("convert {$rootdir}/selfies/{$context->get_identity()}.jpg -resize 1600x1600^ -gravity center -crop 1600x1600+0+0 +repage {$rootdir}/images/badge.png -composite {$rootdir}/badges/{$context->get_identity()}.jpg > {$rootdir}/badges/{$context->get_identity()}.jpg.log");
 
                 mark_response_and_proceed($context, 3, true);
+
+                // Update stats
+                update_daily_stat_counter($context, STATS_SELFIES, TEXT_CHANNEL_SELFIE_UPDATE, TEXT_CHANNEL_SELFIE_START);
             }
             else {
                 $context->reply(TEXT_CMD_START_TARGET_3_NOT_PHOTO);

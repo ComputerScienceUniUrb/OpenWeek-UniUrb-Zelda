@@ -100,6 +100,14 @@ const TEXT_STATE_5_RESULTS_6 = " È stato un piacere accompagnarti durante quest
 const TEXT_STATE_5_BADGE_CAPTION = "Il tuo distintivo per la partecipazione all’Open Week!";
 const TEXT_STATE_ARCHIVED = "La caccia al tesoro è conclusa. Spero di rivederti presto a Urbino, magari in uno dei nostri corsi! 👋";
 
+// Channel updates
+const TEXT_CHANNEL_ARRIVALS_START = "I primi visitatori della giornata stanno arrivando!";
+const TEXT_CHANNEL_ARRIVALS_UPDATE = "Finora ho registrato <b>%COUNT%</b> arrivi a Borgo Mercatale e a Porta Santa Lucia.";
+const TEXT_CHANNEL_SELFIE_START = "Qualcuno sembra aver scoperto il <i>selfie point</i>!";
+const TEXT_CHANNEL_SELFIE_UPDATE = "Ho ricevuto <b>%COUNT%</b> vostre foto. Grazie!";
+const TEXT_CHANNEL_COMPLETE_START = "La nostra giornata insieme si sta concludendo.";
+const TEXT_CHANNEL_COMPLETE_UPDATE = "<b>%COUNT%</b> partecipanti hanno completato la caccia al tesoro!";
+
 // Default response for anything else
 const TEXT_FALLBACK_RESPONSE = "Scusami, non ho capito cosa intendi. Usa i comandi /start o /help.";
 const TEXT_UNREQUESTED_PHOTO = "Grazie per la foto!";
