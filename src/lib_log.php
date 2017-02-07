@@ -14,24 +14,24 @@ class Logger {
     const SEVERITY_WARNING = 128;
     const SEVERITY_ERROR = 255;
 
-    public static function debug($message, $tag = '') {
-        self::common(self::SEVERITY_DEBUG, $message, $tag);
+    public static function debug($message, $tag = '', $context = null) {
+        self::common(self::SEVERITY_DEBUG, $message, $tag, $context);
     }
 
-    public static function info($message, $tag = '') {
-        self::common(self::SEVERITY_INFO, $message, $tag);
+    public static function info($message, $tag = '', $context = null) {
+        self::common(self::SEVERITY_INFO, $message, $tag, $context);
     }
 
-    public static function warning($message, $tag = '') {
-        self::common(self::SEVERITY_WARNING, $message, $tag);
+    public static function warning($message, $tag = '', $context = null) {
+        self::common(self::SEVERITY_WARNING, $message, $tag, $context);
     }
 
-    public static function error($message, $tag = '') {
-        self::common(self::SEVERITY_ERROR, $message, $tag);
+    public static function error($message, $tag = '', $context = null) {
+        self::common(self::SEVERITY_ERROR, $message, $tag, $context);
     }
 
-    public static function fatal($message, $tag = '') {
-        self::error($message, $tag);
+    public static function fatal($message, $tag = '', $context = null) {
+        self::error($message, $tag, $context);
 
         die();
     }
@@ -47,14 +47,24 @@ class Logger {
             return 'D';
     }
 
-    private static function common($level, $message, $tag = '') {
+    private static function common($level, $message, $tag = '', $context = null) {
+        $identity = ($context != null && $context->is_registered()) ? $context->get_identity() : 'NULL';
+        $filename = basename($tag, '.php');
+
         if(is_cli()) {
-            // In CLI mode, output all logs to stderr
+            // In CLI mode, output all logs to stderr and we're done
             fwrite(STDERR, self::severity_to_char($level) . '/' . $message . PHP_EOL);
         }
-        else if($level >= self::SEVERITY_WARNING) {
-            // Otherwise, write warning and errors to the system log
-            error_log(self::severity_to_char($level) . ':' . $tag . ':' . $message);
+        else {
+            // Warnings and errors go to the system log
+            if($level >= self::SEVERITY_WARNING) {
+                error_log(self::severity_to_char($level) . ':' . $filename . ':' . $message);
+            }
+
+            // Log to DB if needed
+            if(DEBUG_TO_DB || $level > self::SEVERITY_DEBUG) {
+                db_perform_action("INSERT INTO `log` (`id`, `level`, `identity`, `tag`, `message`, `timestamp`) VALUES(DEFAULT, {$level}, {$identity}, '" . db_escape($filename) . "', '" . db_escape($message) . "', NOW())");
+            }
         }
     }
 

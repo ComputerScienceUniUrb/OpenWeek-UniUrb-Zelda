@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Feb 07, 2017 at 08:34 PM
+-- Generation Time: Feb 08, 2017 at 12:19 AM
 -- Server version: 5.5.53-0+deb8u1
 -- PHP Version: 5.6.27-0+deb8u1
 
@@ -55,6 +55,21 @@ INSERT INTO `locations` (`id`, `code`, `target_state`, `description`) VALUES
 (4, 'vVVxASDS', 40, 'Mensa Tridente'),
 (5, 'GvL7tVCc', 50, 'Teatro La Vela'),
 (6, 'd9Ua9NvL', 60, 'Informatica Applicata stand');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `log`
+--
+
+CREATE TABLE `log` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `level` tinyint(3) UNSIGNED NOT NULL DEFAULT '0',
+  `identity` int(10) UNSIGNED DEFAULT NULL,
+  `tag` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `message` text COLLATE utf8_unicode_ci NOT NULL,
+  `timestamp` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -129,6 +144,14 @@ ALTER TABLE `locations`
   ADD UNIQUE KEY `code` (`code`);
 
 --
+-- Indexes for table `log`
+--
+ALTER TABLE `log`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `identity` (`identity`),
+  ADD KEY `details_index` (`level`,`tag`) USING BTREE;
+
+--
 -- Indexes for table `reached_locations`
 --
 ALTER TABLE `reached_locations`
@@ -155,7 +178,12 @@ ALTER TABLE `stats`
 -- AUTO_INCREMENT for table `identities`
 --
 ALTER TABLE `identities`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'Internal ID';
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'Internal ID', AUTO_INCREMENT=4;
+--
+-- AUTO_INCREMENT for table `log`
+--
+ALTER TABLE `log`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- Constraints for dumped tables
 --
@@ -165,6 +193,12 @@ ALTER TABLE `identities`
 --
 ALTER TABLE `identities`
   ADD CONSTRAINT `school_constraint` FOREIGN KEY (`school_code`) REFERENCES `schools` (`codice_scuola`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- Constraints for table `log`
+--
+ALTER TABLE `log`
+  ADD CONSTRAINT `identity_constraint` FOREIGN KEY (`identity`) REFERENCES `identities` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `reached_locations`
