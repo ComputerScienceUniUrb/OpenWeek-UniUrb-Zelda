@@ -118,3 +118,13 @@ const TEXT_FALLBACK_RESPONSE = "Scusami, non ho capito cosa intendi. Usa i coman
 const TEXT_UNREQUESTED_PHOTO = "Grazie per la foto!";
 const TEXT_UNSUPPORTED_OTHER = "Piano, piano!\n\nPurtroppo non gestisco questo tipo di messaggi: inviami solo messaggi testuali per piacere.";
 const TEXT_PLACEHOLDER = "???";
+
+const TEXT_WEEKDAYS = [
+    'domenica',
+    'lunedì',
+    'martedì',
+    'mercoledì',
+    'giovedì',
+    'venerdì',
+    'sabato'
+];

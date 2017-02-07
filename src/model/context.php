@@ -114,7 +114,7 @@ class Context {
         $hydration_values = array(
             '%FIRST_NAME%' => $this->get_message()->get_sender_first_name(),
             '%FULL_NAME%' => $this->get_message()->get_sender_full_name(),
-            '%WEEKDAY%' => strftime('%A')
+            '%WEEKDAY%' => TEXT_WEEKDAYS[intval(strftime('%w'))]
         );
 
         $hydrated = hydrate($message, unite_arrays($hydration_values, $additional_values));
