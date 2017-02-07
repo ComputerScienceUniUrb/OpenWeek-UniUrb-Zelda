@@ -8,7 +8,8 @@
  *
  * Generally, all strings can make use of the following variables:
  * %FULL_NAME% User's full name
- * %GROUP_NAME% Group's name
+ * %FIRST_NAME% User's first name
+ * %WEEKDAY% Week day in letters
  * Additional variables are available for some strings.
  */
 
@@ -73,7 +74,7 @@ const TEXT_CMD_REGISTER_SCHOOL_OK = "Ok, quindi studi presso la scuola %SCHOOL_N
 
 // States
 const TEXT_STATE_NEW = "Per completare la registrazione, scrivi qui il <i>codice meccanografico</i> della tua scuola di provenienza. (Si tratta di un codice alfanumerico a 10 caratteri.)";
-const TEXT_STATE_REG_OK = "Quando raggiungi Urbino, scannerizza il <i>QR Code</i> che troverai a <b>Borgo Mercatale</b> o a <b>Porta Santa Lucia</b>. Ci vediamo lì!\nNel frattempo puoi iscriverti al canale Telegram @openuniurb per ricevere aggiornamenti. 📢";
+const TEXT_STATE_REG_OK = "Quando raggiungi Urbino, scansiona il <i>QR Code</i> che troverai a <b>Borgo Mercatale</b> o a <b>Porta Santa Lucia</b>. Ci vediamo lì!\nNel frattempo puoi iscriverti al canale Telegram @openuniurb per ricevere aggiornamenti. 📢";
 const TEXT_STATE_1 = "Come primo passo dovrai raggiungere il <b>Polo Didattico Volponi</b>, che si trova in via Saffi n. 15. Utilizza la mappa per raggiungere più facilmente la tua destinazione.";
 const TEXT_STATE_1_LOCATION = [ 43.722022, 12.636611 ];
 const TEXT_STATE_2 = "Sulla via della mensa, puoi passare al <i>selfie point</i> di fronte ai famosi Torricini del Palazzo Ducale di Urbino. Ti invio la posizione del punto da raggiungere.";
@@ -97,16 +98,16 @@ const TEXT_STATE_5_BADGE_CAPTION = "Il tuo distintivo per la partecipazione all�
 const TEXT_STATE_ARCHIVED = "La tua caccia al tesoro è conclusa. Spero di rivederti presto a Urbino, magari in uno dei nostri corsi! 👋";
 
 // Channel updates
-const TEXT_CHANNEL_ARRIVALS_START = "I primi visitatori della giornata stanno arrivando! 🎉";
+const TEXT_CHANNEL_ARRIVALS_START = "I primi partecipanti alla caccia del tesoro della giornata di %WEEKDAY% stanno arrivando! 🎉";
 const TEXT_CHANNEL_ARRIVALS_UPDATE = "👥 Finora ho registrato <b>%COUNT%</b> arrivi a Borgo Mercatale e a Porta Santa Lucia.";
-const TEXT_CHANNEL_SELFIE_START = "Qualcuno sembra aver scoperto il <i>selfie point</i>!";
+const TEXT_CHANNEL_SELFIE_START = "Qualcuno sembra aver scoperto il <i>selfie point</i> in prossimità del Palazzo Ducale!";
 const TEXT_CHANNEL_SELFIE_UPDATE = "🖼️ Ho ricevuto <b>%COUNT%</b> vostre foto. Grazie!";
-const TEXT_CHANNEL_COMPLETE_START = "La nostra giornata insieme si sta concludendo: i primi partecipanti hanno concluso la caccia al tesoro.";
+const TEXT_CHANNEL_COMPLETE_START = "La nostra giornata insieme si sta concludendo: i primi partecipanti hanno concluso la caccia al tesoro di %WEEKDAY%.";
 const TEXT_CHANNEL_COMPLETE_UPDATE = "🏁 <b>%COUNT%</b> partecipanti hanno completato la caccia al tesoro!";
 
 // Stat messages
-const TEXT_STATS_ARRIVALS_FIRST = "Sei il primo partecipante a raggiungere il punto d'inizio!";
-const TEXT_STATS_ARRIVALS_OTHER = "Sei il %COUNT%° partecipante alla caccia al tesoro di oggi!";
+const TEXT_STATS_ARRIVALS_FIRST = "Sei il primo partecipante a raggiungere il punto d'inizio, questo %WEEKDAY%!";
+const TEXT_STATS_ARRIVALS_OTHER = "Sei il %COUNT%° partecipante alla caccia al tesoro di %WEEKDAY%!";
 const TEXT_STATS_SELFIE_FIRST = "Questo è il primo selfie che ricevo oggi, fantastico!";
 const TEXT_STATS_SELFIE_OTHER = "Questo è il %COUNT%° selfie che ricevo oggi!";
 const TEXT_STATS_COMPLETE_FIRST = " (Tra l'altro, sei il primo partecipante a concludere la caccia al tesoro oggi!)";
