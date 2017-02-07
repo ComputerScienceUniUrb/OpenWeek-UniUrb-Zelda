@@ -29,7 +29,8 @@ const TEXT_CMD_HELP = "Trovi le informazioni per usare il bot sul <a href=\"" . 
 const TEXT_CMD_RESET = "Reset effettuato.";
 
 // Responses to "/start"
-const TEXT_CMD_START_NEW = "Ciao, %FULL_NAME%! Benvenuto al bot dell’<b>Open Week</b> presso l’<b>Università di Urbino “Carlo Bo”</b>. Segui le <a href=\"" . WEBSITE_START . "\">istruzioni sul sito ufficiale</a> per iniziare.";
+const TEXT_CMD_START_WELCOME = "Ciao, %FULL_NAME%! Benvenuto al bot dell’<b>Open Week</b> presso l’<b>Università di Urbino “Carlo Bo”</b>.";
+const TEXT_CMD_START_NEW = TEXT_CMD_START_WELCOME . " Segui le <a href=\"" . WEBSITE_START . "\">istruzioni sul sito ufficiale</a> per iniziare.";
 const TEXT_CMD_START_REGISTERED = "Bentornato, %FULL_NAME%! Questo è il bot dedicato all’<b>Open Week</b> presso l’<b>Università di Urbino “Carlo Bo”</b>.";
 
 const TEXT_CMD_START_UNKNOWN_PAYLOAD = "Non ho capito… Forse hai scritto a mano un link? Ti prego di usare i link contenuti nei <i>QR Code</i> così come sono.";

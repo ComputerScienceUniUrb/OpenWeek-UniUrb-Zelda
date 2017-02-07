@@ -38,10 +38,14 @@ class Context {
         return ($this->identity !== 0 && $this->state >= STATE_REG_OK);
     }
 
+    /**
+     * Requires the user to be registered in order to continue.
+     * Returns true if the conversation may continue.
+     */
     function require_registration() {
         if(!$this->is_registered()) {
-            $this->reply(TEXT_FAILURE_NOT_REGISTERED);
-            return false;
+            $this->register();
+            $this->reply(TEXT_CMD_START_WELCOME);
         }
 
         return true;
