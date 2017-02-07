@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Feb 06, 2017 at 07:38 PM
+-- Generation Time: Feb 07, 2017 at 08:34 PM
 -- Server version: 5.5.53-0+deb8u1
 -- PHP Version: 5.6.27-0+deb8u1
 
@@ -53,7 +53,8 @@ INSERT INTO `locations` (`id`, `code`, `target_state`, `description`) VALUES
 (2, 'Q7zF0q0V', 20, 'Magistero'),
 (3, 'IZoJzRgJ', 30, 'Selfie point'),
 (4, 'vVVxASDS', 40, 'Mensa Tridente'),
-(5, 'GvL7tVCc', 50, 'Teatro La Vela');
+(5, 'GvL7tVCc', 50, 'Teatro La Vela'),
+(6, 'd9Ua9NvL', 60, 'Informatica Applicata stand');
 
 -- --------------------------------------------------------
 
