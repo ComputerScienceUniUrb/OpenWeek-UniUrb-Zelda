@@ -12,7 +12,7 @@
  * Additional variables are available for some strings.
  */
 
-const WEBSITE_START = "https://www.uniurb.it/it/portale/index.php?mist_id=23000&lang=IT&tipo=S1&page=3752";
+const WEBSITE_START = "http://www.uniurb.it/gioca-con-zelda";
 
 const TEXT_UNNAMED_GROUP = "Senza nome";
 const TEXT_FAILURE_GENERAL = "Oh! Questo è imbarazzante… Qualcosa è andato storto!\nChi di dovere è stato avvertito e si sta occupando dell’errore.";
