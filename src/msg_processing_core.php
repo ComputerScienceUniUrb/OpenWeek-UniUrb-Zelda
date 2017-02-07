@@ -27,6 +27,8 @@ const STATE_4               = 40;
 const STATE_4_OK            = 41;
 const STATE_5               = 50;
 const STATE_5_OK            = 51;
+const STATE_6               = 60;   // info appl selfie
+const STATE_6_OK            = 61;
 const STATE_ARCHIVED        = 99;   // users from previous days
 
 //Needs some error checking here

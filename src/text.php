@@ -66,6 +66,9 @@ const TEXT_CMD_START_TARGET_5_RESPONSE = [ "giancarlo de carlo", "de carlo", "ca
 const TEXT_CMD_START_TARGET_5_CORRECT = "Esattamente! I collegi universitari ed alcuni interventi nel centro storico sono stati progettati dall’architetto <a href=\"https://it.wikipedia.org/wiki/Giancarlo_De_Carlo\">Giancarlo De Carlo</a>. È stato tra i primi a sperimentare ed applicare in architettura la partecipazione da parte degli utenti nelle fasi di progettazione.";
 const TEXT_CMD_START_TARGET_5_WRONG = "No. I collegi universitari ed alcuni interventi nel centro storico sono stati progettati dall’architetto <a href=\"https://it.wikipedia.org/wiki/Giancarlo_De_Carlo\">Giancarlo De Carlo</a>. È stato tra i primi a sperimentare ed applicare in architettura la partecipazione da parte degli utenti nelle fasi di progettazione.";
 
+const TEXT_CMD_START_TARGET_6 = "Hai raggiunto lo stand del Corso di Laurea in <b>Informatica Applicata</b>. Docenti ed ex-studenti di questo corso mi hanno sviluppato. 🤖\nMandami un tuo <i>selfie</i> e ti preparerò un regalo speciale per essere passato…";
+const TEXT_CMD_START_TARGET_6_NOT_PHOTO = "Inviami una tua foto, per favore.";
+
 const TEXT_CMD_START_ALREADY_REACHED = "Sei già stato in questo luogo.";
 
 // Commands
@@ -83,7 +86,7 @@ const TEXT_STATE_2_LOCATION = [ 43.724226, 12.635721 ];
 const TEXT_STATE_3 = "Ora dirigiti ai collegi universitari per raggiungere la mensa.";
 const TEXT_STATE_3_LOCATION = [ 43.720846, 12.624561 ];
 const TEXT_STATE_4 = "Ora ci sposteremo nella parte più alta dei collegi universitari, il teatro del <b>Collegio La Vela</b>. Lì ti aspettano delle esibizioni delle associazioni studentesche per mostrarti uno spaccato di quelle che potrebbero essere le attività da svolgere ad Urbino nel tempo libero. Buon divertimento!";
-const TEXT_STATE_4_LOCATION = [ 43.717976, 12.626624 ];
+const TEXT_STATE_4_LOCATION = [ 43.718430, 12.626731 ];
 const TEXT_STATE_5 = "Hai concluso la caccia al tesoro! 🏁\n";
 const TEXT_STATE_5_RESULTS_1 = "Durante il tragitto hai raggiunto ";
 const TEXT_STATE_5_RESULTS_2_SING = "solo una tappa";
@@ -93,9 +96,10 @@ const TEXT_STATE_5_RESULTS_4_NONE = " 0 domande (peccato).";
 const TEXT_STATE_5_RESULTS_4_SING = "d <b>una</b> domanda su 4.";
 const TEXT_STATE_5_RESULTS_4_PLUR = " <b>%CORRECT_ANSWERS%</b> domande su 4!";
 const TEXT_STATE_5_RESULTS_4_ALL  = " <b>tutte</b> le domande! 🏆";
-const TEXT_STATE_5_RESULTS_5 = " Siccome mi hai inviato il tuo selfie, posso ricompensarti per la partecipazione con un distintivo. 🏅";
+const TEXT_STATE_5_RESULTS_5 = " Siccome mi hai inviato il tuo <i>selfie</i>, posso ricompensarti per la partecipazione con un distintivo. 🏅";
 const TEXT_STATE_5_RESULTS_6 = " È stato un piacere accompagnarti durante questa giornata. Spero di trovarti di nuovo a Urbino, magari iscritto ad uno dei nostri corsi! 👋";
 const TEXT_STATE_5_BADGE_CAPTION = "Il tuo distintivo per la partecipazione all’Open Week!";
+const TEXT_STATE_6_BADGE_CAPTION = "Ecco qua. Condividi questa immagine con l’hashtag #infoappl! Non dimenticarti anche di prendere un moschettone omaggio al nostro stand.";
 const TEXT_STATE_ARCHIVED = "La tua caccia al tesoro è conclusa. Spero di rivederti presto a Urbino, magari in uno dei nostri corsi! 👋";
 
 // Channel updates

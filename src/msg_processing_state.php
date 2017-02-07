@@ -82,6 +82,10 @@ function msg_processing_handle_state($context) {
             $context->set_state(STATE_ARCHIVED);
             return true;
 
+        case STATE_6_OK:
+            telegram_send_photo($context->get_chat_id(), "../badges/{$context->get_identity()}-infoappl.jpg", TEXT_STATE_6_BADGE_CAPTION);
+            return true;
+
         case STATE_ARCHIVED:
             // Game is over for you
             $context->reply(TEXT_STATE_ARCHIVED);
@@ -189,6 +193,24 @@ function msg_processing_handle_response($context) {
         case STATE_5:
             $input = $context->get_response();
             process_response($context, 5, $input);
+            return true;
+
+        case STATE_6:
+            if($context->get_message()->is_photo()) {
+                telegram_send_chat_action($context->get_chat_id());
+
+                $file_info = telegram_get_file_info($context->get_message()->get_photo_large_id());
+                telegram_download_file($file_info['file_path'], "../selfies/{$context->get_identity()}-infoappl.jpg");
+
+                // Sync process photo to produce badge
+                $rootdir = realpath(dirname(__FILE__) . '/..');
+                exec("convert {$rootdir}/selfies/{$context->get_identity()}-infoappl.jpg -resize 1600x1600^ -gravity center -crop 1600x1600+0+0 +repage {$rootdir}/images/badge-infoapp.png -composite {$rootdir}/badges/{$context->get_identity()}-infoappl.jpg");
+
+                mark_response_and_proceed($context, 6, true);
+            }
+            else {
+                $context->reply(TEXT_CMD_START_TARGET_6_NOT_PHOTO);
+            }
             return true;
     }
 
