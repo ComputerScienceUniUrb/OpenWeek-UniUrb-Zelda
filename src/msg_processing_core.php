@@ -43,7 +43,7 @@ if($in->is_group()) {
 }
 else if($in->is_private()) {
     if($in->is_text()) {
-        Logger::debug("Text: '{$in->text}'", __FILE__, $context);
+        Logger::info("Received text: '{$in->text}', state: {$context->get_state()}", __FILE__, $context);
 
         if($context->is_admin()) {
             if(msg_processing_admin($context)) {

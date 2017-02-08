@@ -103,7 +103,7 @@ function msg_processing_handle_state($context) {
 }
 
 function process_response($context, $state, $input) {
-    Logger::info("Response is {$input}", __FILE__, $context);
+    Logger::debug("Provided response is {$input}", __FILE__, $context);
 
     $ok_value = constant("TEXT_CMD_START_TARGET_{$state}_RESPONSE");
     if(is_array($ok_value)) {

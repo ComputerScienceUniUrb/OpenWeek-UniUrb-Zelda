@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Feb 08, 2017 at 12:19 AM
+-- Generation Time: Feb 08, 2017 at 03:51 PM
 -- Server version: 5.5.53-0+deb8u1
 -- PHP Version: 5.6.27-0+deb8u1
 
@@ -66,6 +66,7 @@ CREATE TABLE `log` (
   `id` int(10) UNSIGNED NOT NULL,
   `level` tinyint(3) UNSIGNED NOT NULL DEFAULT '0',
   `identity` int(10) UNSIGNED DEFAULT NULL,
+  `telegram_id` int(11) DEFAULT NULL,
   `tag` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `message` text COLLATE utf8_unicode_ci NOT NULL,
   `timestamp` datetime NOT NULL
@@ -178,12 +179,12 @@ ALTER TABLE `stats`
 -- AUTO_INCREMENT for table `identities`
 --
 ALTER TABLE `identities`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'Internal ID', AUTO_INCREMENT=4;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'Internal ID', AUTO_INCREMENT=9;
 --
 -- AUTO_INCREMENT for table `log`
 --
 ALTER TABLE `log`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=122;
 --
 -- Constraints for dumped tables
 --

@@ -49,6 +49,7 @@ class Logger {
 
     private static function common($level, $message, $tag = '', $context = null) {
         $identity = ($context != null && $context->is_registered()) ? $context->get_identity() : 'NULL';
+        $user_id = ($context != null) ? $context->get_user_id() : 'NULL';
         $filename = basename($tag, '.php');
 
         if(is_cli()) {
@@ -63,7 +64,7 @@ class Logger {
 
             // Log to DB if needed
             if(DEBUG_TO_DB || $level > self::SEVERITY_DEBUG) {
-                db_perform_action("INSERT INTO `log` (`id`, `level`, `identity`, `tag`, `message`, `timestamp`) VALUES(DEFAULT, {$level}, {$identity}, '" . db_escape($filename) . "', '" . db_escape($message) . "', NOW())");
+                db_perform_action("INSERT INTO `log` (`id`, `level`, `identity`, `telegram_id`, `tag`, `message`, `timestamp`) VALUES(DEFAULT, {$level}, {$identity}, {$user_id}, '" . db_escape($filename) . "', '" . db_escape($message) . "', NOW())");
             }
         }
     }
