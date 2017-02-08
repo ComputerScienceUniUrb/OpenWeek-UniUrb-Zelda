@@ -29,6 +29,7 @@ const STATE_5               = 50;
 const STATE_5_OK            = 51;
 const STATE_6               = 60;   // info appl selfie
 const STATE_6_OK            = 61;
+const STATE_PREARCHIVE      = 90;   // completed but waiting for final selfie
 const STATE_ARCHIVED        = 99;   // users from previous days
 
 //Needs some error checking here

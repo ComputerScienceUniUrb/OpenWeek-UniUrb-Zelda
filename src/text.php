@@ -99,6 +99,7 @@ const TEXT_STATE_5_RESULTS_4_ALL  = " <b>tutte</b> le domande! 🏆";
 const TEXT_STATE_5_RESULTS_5 = " Siccome mi hai inviato il tuo <i>selfie</i>, posso ricompensarti per la partecipazione con un distintivo. 🏅";
 const TEXT_STATE_5_RESULTS_6 = " È stato un piacere accompagnarti durante questa giornata. Spero di trovarti di nuovo a Urbino, magari iscritto ad uno dei nostri corsi! 👋";
 const TEXT_STATE_5_BADGE_CAPTION = "Il tuo distintivo per la partecipazione all’Open Week!";
+const TEXT_STATE_5_NO_BADGE = "Siccome non hai raggiunto la tappa del <i>selfie point</i>, inviami ora una tua foto in modo da ricevere un distintivo per la tua partecipazione. 🏅\n(Accertati che il soggetto sia ben centrato nell’immagine.)";
 const TEXT_STATE_6_BADGE_CAPTION = "Ecco qua. Condividi questa immagine con l’hashtag #infoappl! Non dimenticarti anche di prendere un moschettone omaggio al nostro stand.";
 const TEXT_STATE_ARCHIVED = "La tua caccia al tesoro è conclusa. Spero di rivederti presto a Urbino, magari in uno dei nostri corsi! 👋";
 

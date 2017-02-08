@@ -66,7 +66,7 @@ function msg_processing_handle_state($context) {
                 ),
                 ($counter == 1) ? TEXT_STATS_COMPLETE_FIRST : TEXT_STATS_COMPLETE_OTHER,
                 ($selfie_exists ? TEXT_STATE_5_RESULTS_5 : ''),
-                TEXT_STATE_5_RESULTS_6
+                ($selfie_exists ? TEXT_STATE_5_RESULTS_6 : '')
             ));
             $context->reply($reply, array(
                 '%REACHED_LOCATIONS%' => $total_steps,
@@ -77,9 +77,16 @@ function msg_processing_handle_state($context) {
             if($selfie_exists) {
                 // Badge was generated, send it back!
                 telegram_send_photo($context->get_chat_id(), "../badges/{$context->get_identity()}.jpg", TEXT_STATE_5_BADGE_CAPTION);
+
+                $context->set_state(STATE_ARCHIVED);
+            }
+            else {
+                // No selfie sent in, signal and wait
+                $context->reply(TEXT_STATE_5_NO_BADGE);
+
+                $context->set_state(STATE_PREARCHIVE);
             }
 
-            $context->set_state(STATE_ARCHIVED);
             return true;
 
         case STATE_6_OK:
@@ -207,6 +214,29 @@ function msg_processing_handle_response($context) {
                 exec("convert {$rootdir}/selfies/{$context->get_identity()}-infoappl.jpg -resize 1600x1600^ -gravity center -crop 1600x1600+0+0 +repage {$rootdir}/images/badge-infoapp.png -composite {$rootdir}/badges/{$context->get_identity()}-infoappl.jpg");
 
                 mark_response_and_proceed($context, 6, true);
+            }
+            else {
+                $context->reply(TEXT_CMD_START_TARGET_6_NOT_PHOTO);
+            }
+            return true;
+
+        case STATE_PREARCHIVE:
+            if($context->get_message()->is_photo()) {
+                telegram_send_chat_action($context->get_chat_id());
+
+                update_daily_stat_counter($context, STATS_SELFIES, TEXT_CHANNEL_SELFIE_UPDATE, TEXT_CHANNEL_SELFIE_START);
+
+                $file_info = telegram_get_file_info($context->get_message()->get_photo_large_id());
+                telegram_download_file($file_info['file_path'], "../selfies/{$context->get_identity()}.jpg");
+
+                // Sync process photo to produce badge
+                $rootdir = realpath(dirname(__FILE__) . '/..');
+                exec("convert {$rootdir}/selfies/{$context->get_identity()}.jpg -resize 1600x1600^ -gravity center -crop 1600x1600+0+0 +repage {$rootdir}/images/badge.png -composite {$rootdir}/badges/{$context->get_identity()}.jpg");
+
+                telegram_send_photo($context->get_chat_id(), "../badges/{$context->get_identity()}.jpg", TEXT_STATE_5_BADGE_CAPTION);
+                $context->reply(TEXT_STATE_5_RESULTS_6);
+
+                $context->set_state(STATE_ARCHIVED);
             }
             else {
                 $context->reply(TEXT_CMD_START_TARGET_6_NOT_PHOTO);
