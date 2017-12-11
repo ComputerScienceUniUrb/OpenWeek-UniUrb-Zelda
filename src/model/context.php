@@ -163,7 +163,7 @@ class Context {
      */
     function register() {
         if($this->identity === 0) {
-            Logger::debug("Registering user identity", __FILE__, $this);
+            Logger::info("Registering user identity for Telegram user {$this->get_user_id()}", __FILE__, $this);
 
             if(db_perform_action("INSERT INTO `identities` (`telegram_id`, `full_name`, `first_access`, `last_access`) VALUES({$this->get_user_id()}, '{$this->message->get_sender_full_name()}', NOW(), NOW())") === false) {
                 Logger::error("Failed to register group status for user #{$this->get_user_id()}", __FILE__, $this);

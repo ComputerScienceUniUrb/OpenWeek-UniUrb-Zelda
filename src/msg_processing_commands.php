@@ -17,6 +17,12 @@ require_once('model/context.php');
  * @param $payload Secret string payload that identifies location.
  */
 function switch_to_location($context, $payload) {
+    if($payload == 'BqeyekUv') {
+        // Flyer payload for presentation
+        $context->reply(TEXT_CMD_FLYER);
+        return;
+    }
+
     $location = db_row_query("SELECT l.`id`, l.`target_state`, (SELECT count(*) FROM `reached_locations` AS r WHERE r.`location_id` = l.`id` AND r.`id` = {$context->get_identity()}) AS reached FROM `locations` AS l WHERE `code` = '" . db_escape($payload) . "'");
 
     if($location !== null) {

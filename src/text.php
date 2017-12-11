@@ -35,6 +35,8 @@ const TEXT_CMD_START_REGISTERED = "Bentornato, %FULL_NAME%! Questo è il bot ded
 
 const TEXT_CMD_START_UNKNOWN_PAYLOAD = "Non ho capito… Forse hai scritto a mano un link? Ti prego di usare i link contenuti nei <i>QR Code</i> così come sono.";
 
+const TEXT_CMD_FLYER = "Ti guiderò alla scoperta dell’Università durante la <b>giornata di orientamento</b>. Sono stato progettato e sviluppato da docenti e da ex-studenti del <a href=\"http://informatica.uniurb.it\">Corso di Laurea di Informatica Applicata</a> di questa Università. (Ricordati di seguire il canale Telegram @openuniurb per ricevere aggiornamenti. 📢)\nCi vediamo <a href=\"https://www.uniurb.it/universitaaperta\">a Urbino</a>!";
+
 const TEXT_CMD_START_TARGET_1 = "Benvenuto ad Urbino!\nIo sono Zelda, il bot dell’Università degli Studi di Urbino “Carlo Bo” e ti guiderò alla scoperta dell’Università durante questa <b>giornata di orientamento</b>. Sono stato progettato e sviluppato da docenti e da ex-studenti del <a href=\"http://informatica.uniurb.it\">Corso di Laurea di Informatica Applicata</a> di questa Università. (Ricordati di seguire il canale Telegram @openuniurb per ricevere aggiornamenti. 📢)";
 const TEXT_CMD_START_TARGET_1_QUESTION = "Sai in che anno è stata fondata L’Università degli Studi di Urbino “Carlo Bo”?";
 const TEXT_CMD_START_TARGET_1_KEYBOARD = [ [ 'Nel 1506' ], [ 'Nel 1706' ], [ 'Nel 1906' ] ];
