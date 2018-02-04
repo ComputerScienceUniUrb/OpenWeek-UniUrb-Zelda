@@ -7,7 +7,19 @@
  * Support library. Don't change a thing here.
  */
 
+require_once(dirname(__FILE__) . '/lib_utility.php');
+
 class Logger {
+
+    private static $is_suspended = false;
+
+    /**
+     * Suspend logging to database and bot.
+     * Can be used temporarily when warnings and errors are expected.
+     */
+    public static function suspend($suspend = false) {
+        self::$is_suspended = $suspend;
+    }
 
     const SEVERITY_DEBUG = 1;
     const SEVERITY_INFO = 64;
@@ -48,25 +60,42 @@ class Logger {
     }
 
     private static function common($level, $message, $tag = '', $context = null) {
-        $identity = ($context != null && $context->is_registered()) ? $context->get_identity() : 'NULL';
-        $user_id = ($context != null) ? $context->get_user_id() : 'NULL';
-        $filename = basename($tag, '.php');
+        $base_tag = basename($tag, '.php');
 
         if(is_cli()) {
-            // In CLI mode, output all logs to stderr and we're done
+            // In CLI mode, output all logs to stderr
             fwrite(STDERR, self::severity_to_char($level) . '/' . $message . PHP_EOL);
         }
-        else {
-            // Warnings and errors go to the system log
+        else if(!self::$is_suspended) {
             if($level >= self::SEVERITY_WARNING) {
-                error_log(self::severity_to_char($level) . ':' . $filename . ':' . $message);
+                // Write warning and errors to the system log
+                error_log(self::severity_to_char($level) . ':' . $base_tag . ':' . $message);
             }
 
             // Log to DB if needed
             if(DEBUG_TO_DB || $level > self::SEVERITY_DEBUG) {
-                db_perform_action("INSERT INTO `log` (`id`, `level`, `identity`, `telegram_id`, `tag`, `message`, `timestamp`) VALUES(DEFAULT, {$level}, {$identity}, {$user_id}, '" . db_escape($filename) . "', '" . db_escape($message) . "', NOW())");
+                $identity = ($context != null && $context->get_internal_id() != null) ? $context->get_internal_id() : 'NULL';
+
+                db_perform_action("INSERT INTO `log` (`log_id`, `severity`, `tag`, `message`, `timestamp`, `identity_id`) VALUES(DEFAULT, {$level}, '" . db_escape($base_tag) . "', '" . db_escape($message) . "', NOW(), {$identity})");
             }
         }
     }
 
 }
+
+function logger_fatal_handler() {
+    $error = error_get_last();
+
+    if($error != null && $error['type'] === E_ERROR) {
+        // This is a fatal error, whoopsie
+        Logger::suspend(false);
+        Logger::error(sprintf(
+            '%s (line %d)',
+            $error['message'],
+            $error['line']
+        ), $error['file']);
+    }
+}
+
+// Register final "fatal error" handler
+register_shutdown_function("logger_fatal_handler");

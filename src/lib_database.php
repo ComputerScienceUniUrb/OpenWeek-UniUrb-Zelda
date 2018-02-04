@@ -7,10 +7,22 @@
  * Database support library. Don't change a thing here.
  */
 
+/**
+ * Converts a nullable integer to a database string.
+ */
+function i2db($i) {
+    if(is_int($i)) {
+        return $i;
+    }
+    else {
+        return 'NULL';
+    }
+}
+
  function db_default_error_logging($connection, $message = "Database error") {
     $errno = mysqli_errno($connection);
     $error = mysqli_error($connection);
-    error_log("$message #$errno: $error");
+    Logger::warning("$message #$errno: $error", __FILE__);
  }
 
 /**
@@ -40,8 +52,7 @@ function db_open_connection($quick = false) {
             // This can be removed for performance since we usually have no
             // long-running scripts.
             if(!mysqli_ping($connection)) {
-                error_log('Database connection already open but does not respond to ping');
-                die();
+                Logger::fatal('Database connection already open but does not respond to ping', __FILE__);
             }
         }
 
@@ -50,8 +61,7 @@ function db_open_connection($quick = false) {
     else {
         // Check configuration
         if(!DATABASE_USERNAME || !DATABASE_NAME) {
-            error_log('Please configure the database connection in file config.php');
-            die();
+            Logger::fatal('Please configure the database connection in file config.php', __FILE__);
         }
 
         // Open up a new connection
@@ -60,12 +70,11 @@ function db_open_connection($quick = false) {
         if(!$connection) {
             $errno = mysqli_connect_errno();
             $error = mysqli_connect_error();
-            error_log("Failed to establish database connection. Error #$errno: $error");
-            die();
+            Logger::fatal("Failed to establish database connection. Error #$errno: $error", __FILE__);
         }
 
         if(!mysqli_real_query($connection, 'SET NAMES utf8')) {
-            error_log("Failed to set connection character set to UTF8");
+            Logger::warning("Failed to set names UTF8", __FILE__);
         }
 
         // Store connection for later
@@ -132,13 +141,13 @@ function db_scalar_query($sql) {
     // Sanity checks
     if(mysqli_field_count($connection) !== 1) {
         mysqli_free_result($result);
-        error_log("Query ($sql) generated results with multiple fields (non-scalar)");
+        Logger::error("Query ($sql) generated results with multiple fields (non-scalar)", __FILE__);
         return false;
     }
     $num_rows = mysqli_num_rows($result);
-    if($num_rows > 1) {
+    if($num_rows > 1 && DEBUG) {
         mysqli_free_result($result);
-        error_log("Query ($sql) generated more than one row of results (non-scalar)");
+        Logger::error("Query ($sql) generated more than one row of results (non-scalar)", __FILE__);
         return false;
     }
     else if($num_rows == 0) {
@@ -148,19 +157,33 @@ function db_scalar_query($sql) {
 
     // Extract first row
     $row = mysqli_fetch_row($result);
+
+    // Check for single (first) field type
+    // Field type values from: http://php.net/manual/en/mysqli-result.fetch-field.php#106064
+    $is_integer = false;
+    $field_info = mysqli_fetch_field($result);
+    if($field_info !== false) {
+        if(in_array($field_info->type, [ 16, 1, 1, 2, 9, 3, 8 ])) {
+            $is_integer = true;
+        }
+    }
+
     mysqli_free_result($result);
 
     //Error checking on results (just for the sake of it)
     if($row == null) {
-        error_log("Failed to access first row of query results");
+        Logger::error("Failed to access first row of query results", __FILE__);
         return false;
     }
     if(count($row) < 1) {
-        error_log("Results row is empty");
+        Logger::error("Results row is empty", __FILE__);
         return false;
     }
 
     // Extract and return first field
+    if($is_integer) {
+        return intval($row[0]);
+    }
     return $row[0];
 }
 
@@ -222,9 +245,9 @@ function db_row_query($sql) {
     }
 
     $num_rows = mysqli_num_rows($result);
-    if($num_rows > 1) {
+    if($num_rows > 1 && DEBUG) {
         mysqli_free_result($result);
-        error_log("Query ($sql) generated more than one row of results");
+        Logger::error("Query ($sql) generated more than one row of results", __FILE__);
         return false;
     }
     else if($num_rows == 0) {

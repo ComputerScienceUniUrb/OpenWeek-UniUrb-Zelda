@@ -1,13 +1,15 @@
 -- phpMyAdmin SQL Dump
--- version 4.6.4
+-- version 4.7.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Feb 08, 2017 at 03:51 PM
--- Server version: 5.5.53-0+deb8u1
--- PHP Version: 5.6.27-0+deb8u1
+-- Generation Time: Feb 04, 2018 at 01:49 PM
+-- Server version: 10.1.26-MariaDB-0+deb9u1
+-- PHP Version: 7.0.27-0+deb9u1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
 SET time_zone = "+00:00";
 
 --
@@ -44,18 +46,6 @@ CREATE TABLE `locations` (
   `description` varchar(50) COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
---
--- Dumping data for table `locations`
---
-
-INSERT INTO `locations` (`id`, `code`, `target_state`, `description`) VALUES
-(1, 'BqeyekUv', 10, 'Borgo Mercatale'),
-(2, 'Q7zF0q0V', 20, 'Magistero'),
-(3, 'IZoJzRgJ', 30, 'Selfie point'),
-(4, 'vVVxASDS', 40, 'Mensa Tridente'),
-(5, 'GvL7tVCc', 50, 'Teatro La Vela'),
-(6, 'd9Ua9NvL', 60, 'Informatica Applicata stand');
-
 -- --------------------------------------------------------
 
 --
@@ -63,13 +53,12 @@ INSERT INTO `locations` (`id`, `code`, `target_state`, `description`) VALUES
 --
 
 CREATE TABLE `log` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `level` tinyint(3) UNSIGNED NOT NULL DEFAULT '0',
-  `identity` int(10) UNSIGNED DEFAULT NULL,
-  `telegram_id` int(11) DEFAULT NULL,
+  `log_id` int(10) UNSIGNED NOT NULL,
+  `severity` tinyint(3) UNSIGNED NOT NULL,
   `tag` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `message` text COLLATE utf8_unicode_ci NOT NULL,
-  `timestamp` datetime NOT NULL
+  `timestamp` datetime NOT NULL,
+  `identity_id` int(10) UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -148,9 +137,9 @@ ALTER TABLE `locations`
 -- Indexes for table `log`
 --
 ALTER TABLE `log`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `identity` (`identity`),
-  ADD KEY `details_index` (`level`,`tag`) USING BTREE;
+  ADD PRIMARY KEY (`log_id`),
+  ADD KEY `identity_id` (`identity_id`),
+  ADD KEY `tag` (`tag`);
 
 --
 -- Indexes for table `reached_locations`
@@ -179,12 +168,12 @@ ALTER TABLE `stats`
 -- AUTO_INCREMENT for table `identities`
 --
 ALTER TABLE `identities`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'Internal ID', AUTO_INCREMENT=9;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'Internal ID';
 --
 -- AUTO_INCREMENT for table `log`
 --
 ALTER TABLE `log`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=122;
+  MODIFY `log_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 --
 -- Constraints for dumped tables
 --
@@ -196,14 +185,9 @@ ALTER TABLE `identities`
   ADD CONSTRAINT `school_constraint` FOREIGN KEY (`school_code`) REFERENCES `schools` (`codice_scuola`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
--- Constraints for table `log`
---
-ALTER TABLE `log`
-  ADD CONSTRAINT `identity_constraint` FOREIGN KEY (`identity`) REFERENCES `identities` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
-
---
 -- Constraints for table `reached_locations`
 --
 ALTER TABLE `reached_locations`
   ADD CONSTRAINT `location_id` FOREIGN KEY (`location_id`) REFERENCES `locations` (`id`),
   ADD CONSTRAINT `user_id` FOREIGN KEY (`id`) REFERENCES `identities` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+COMMIT;
