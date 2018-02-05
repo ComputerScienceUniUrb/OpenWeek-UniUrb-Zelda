@@ -38,10 +38,7 @@ $context = new Context($in);
 
 Logger::debug("User state: {$context->get_state()}", __FILE__, $context);
 
-if($in->is_group()) {
-    // Group (TODO)
-}
-else if($in->is_private()) {
+if($in->is_private()) {
     if($in->is_text()) {
         Logger::info("Received text: '{$in->text}', state: {$context->get_state()}", __FILE__, $context);
 

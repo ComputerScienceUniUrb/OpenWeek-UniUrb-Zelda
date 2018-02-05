@@ -7,9 +7,8 @@
  * Class wrapping the bot's context in this run.
  */
 
-require_once('lib.php');
-
-require_once('incoming_message.php');
+require_once(dirname(__FILE__) . '/../lib.php');
+require_once(dirname(__FILE__) . '/incoming_message.php');
 
 class Context {
 
@@ -21,7 +20,7 @@ class Context {
 
     /**
      * Construct Context class.
-     * @param §message IncomingMessage.
+     * @param $message IncomingMessage.
      */
     function __construct($message) {
         if(!($message instanceof IncomingMessage))
@@ -147,7 +146,7 @@ class Context {
     function refresh() {
         $identity = db_row_query("SELECT `id`, `full_name`, `is_admin`, `state` FROM `identities` WHERE `telegram_id` = {$this->get_user_id()}");
         if(!$identity) {
-            // No identity registered
+            Logger::debug("User identity not registered", __FILE__, $this);
             return;
         }
 
