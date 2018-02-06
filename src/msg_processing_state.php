@@ -7,106 +7,70 @@
  * State process message processing.
  */
 
-require_once('lib.php');
-require_once('model/context.php');
+require_once(dirname(__FILE__) . '/lib.php');
+require_once(dirname(__FILE__) . '/model/context.php');
 
-/**
- * Handles the group's current registration state,
- * sending out a question to the user if needed.
- *  @param Context $context - message context.
- * @return bool True if handled, false if no need.
- */
-function msg_processing_handle_state($context) {
-    switch($context->get_state()) {
-        case STATE_NEW:
-            $context->reply(TEXT_STATE_NEW);
-            return true;
+function end_game($context) {
+    $has_received_selfie = db_scalar_query(sprintf(
+        "SELECT COUNT(*) FROM `reached_locations` WHERE `id` = %d AND `location` = '%s' AND `correct_answer` = 1",
+        $context->get_identity(),
+        db_escape(LOCATION_SELFIE)
+    ));
 
-        case STATE_REG_OK:
-            $context->reply(TEXT_STATE_REG_OK);
-            return true;
+    if(!$has_received_selfie) {
+        Logger::debug("User has not received selfie, catch up", __FILE__, $context);
 
-        case STATE_1_OK:
-            $context->reply(TEXT_STATE_1);
-            telegram_send_location($context->get_chat_id(), TEXT_STATE_1_LOCATION[0], TEXT_STATE_1_LOCATION[1]);
-            return true;
-
-        case STATE_2_OK:
-            $context->reply(TEXT_STATE_2);
-            telegram_send_location($context->get_chat_id(), TEXT_STATE_2_LOCATION[0], TEXT_STATE_2_LOCATION[1]);
-            return true;
-
-        case STATE_3_OK:
-            $context->reply(TEXT_STATE_3);
-            telegram_send_location($context->get_chat_id(), TEXT_STATE_3_LOCATION[0], TEXT_STATE_3_LOCATION[1]);
-            return true;
-
-        case STATE_4_OK:
-            $context->reply(TEXT_STATE_4);
-            telegram_send_location($context->get_chat_id(), TEXT_STATE_4_LOCATION[0], TEXT_STATE_4_LOCATION[1]);
-            return true;
-
-        case STATE_5_OK:
-            $total_steps = db_scalar_query("SELECT count(*) as `total` FROM `reached_locations` WHERE `id` = {$context->get_identity()}");
-            $total_answers = db_scalar_query("SELECT sum(`correct_answer`) AS `answers` FROM `reached_locations` WHERE `id` = {$context->get_identity()} AND `location_id` != 3");
-            $selfie_exists = file_exists("../badges/{$context->get_identity()}.jpg");
-
-            // Update stats
-            $counter = update_daily_stat_counter($context, STATS_COMPLETED, TEXT_CHANNEL_COMPLETE_UPDATE, TEXT_CHANNEL_COMPLETE_START);
-
-            $reply = implode('', array(
-                TEXT_STATE_5,
-                TEXT_STATE_5_RESULTS_1,
-                ($total_steps <= 1) ? TEXT_STATE_5_RESULTS_2_SING : TEXT_STATE_5_RESULTS_2_PLUR,
-                TEXT_STATE_5_RESULTS_3,
-                (($total_answers == 0) ? TEXT_STATE_5_RESULTS_4_NONE :
-                    (($total_answers == 1) ? TEXT_STATE_5_RESULTS_4_SING :
-                        (($total_answers < 4) ? TEXT_STATE_5_RESULTS_4_PLUR : TEXT_STATE_5_RESULTS_4_ALL)
-                    )
-                ),
-                ($counter == 1) ? TEXT_STATS_COMPLETE_FIRST : TEXT_STATS_COMPLETE_OTHER,
-                ($selfie_exists ? TEXT_STATE_5_RESULTS_5 : ''),
-                ($selfie_exists ? TEXT_STATE_5_RESULTS_6 : '')
-            ));
-            $context->reply($reply, array(
-                '%REACHED_LOCATIONS%' => $total_steps,
-                '%CORRECT_ANSWERS%'   => $total_answers,
-                '%COUNT%'             => $counter
-            ));
-
-            if($selfie_exists) {
-                // Badge was generated, send it back!
-                telegram_send_photo($context->get_chat_id(), "../badges/{$context->get_identity()}.jpg", TEXT_STATE_5_BADGE_CAPTION);
-
-                $context->set_state(STATE_ARCHIVED);
-            }
-            else {
-                // No selfie sent in, signal and wait
-                $context->reply(TEXT_STATE_5_NO_BADGE);
-
-                $context->set_state(STATE_PREARCHIVE);
-            }
-
-            return true;
-
-        case STATE_6_OK:
-            telegram_send_photo($context->get_chat_id(), "../badges/{$context->get_identity()}-infoappl.jpg", TEXT_STATE_6_BADGE_CAPTION);
-            return true;
-
-        case STATE_ARCHIVED:
-            // Game is over for you
-            $context->reply(TEXT_STATE_ARCHIVED);
-            return true;
+        $context->set_state(STATE_SELFIE_CATCHUP);
+        $context->reply(TEXT_END_NO_BADGE);
+        return;
     }
 
-    return false;
+    Logger::debug("User has received selfie, complete", __FILE__, $context);
+
+    // Stats
+    $counter = update_daily_stat_counter($context, STATS_COMPLETED, TEXT_CHANNEL_COMPLETE_UPDATE, TEXT_CHANNEL_COMPLETE_START);
+
+    // Build final response
+    $total_steps = db_scalar_query("SELECT count(*) as `total` FROM `reached_locations` WHERE `id` = {$context->get_identity()}");
+    $total_answers = db_scalar_query(sprintf(
+        "SELECT sum(`correct_answer`) AS `answers` FROM `reached_locations` WHERE `id` = %d AND `location` NOT IN ('%s')",
+        $context->get_identity(),
+        implode("','", LOCATION_SELFIE_ARRAY)
+    ));
+
+    $reply = implode('', array(
+        TEXT_END_P1,
+        TEXT_END_P2,
+        ($total_steps <= 1) ? TEXT_END_P3_SING : TEXT_END_P3_PLUR,
+        TEXT_END_P4,
+        (($total_answers == 0) ? TEXT_END_P5_NONE :
+            (($total_answers == 1) ? TEXT_END_P5_SING :
+                (($total_answers < 3) ? TEXT_END_P5_PLUR : TEXT_END_P5_ALL)
+            )
+        ),
+        ($counter == 1) ? TEXT_STATS_COMPLETE_FIRST : TEXT_STATS_COMPLETE_OTHER,
+        TEXT_END_P5_CLOSE
+    ));
+    $context->reply($reply, array(
+        '%REACHED_LOCATIONS%' => $total_steps,
+        '%CORRECT_ANSWERS%'   => $total_answers,
+        '%COUNT%'             => $counter
+    ));
+
+    $context->set_state(STATE_COMPLETED);
 }
 
-function process_response($context, $state, $input) {
-    Logger::debug("Provided response is {$input}", __FILE__, $context);
+function process_response($context, $location_code) {
+    $text_root = LOCATION_TEXT_MAP[$location_code];
+    $input = $context->get_response();
 
-    $ok_value = constant("TEXT_CMD_START_TARGET_{$state}_RESPONSE");
-    if(is_array($ok_value)) {
+    Logger::debug("Provided response for {$location_code} is '{$input}'", __FILE__, $context);
+
+    $ok_value = constant($text_root . '_RESPONSE');
+    if(is_integer($ok_value)) {
+        $is_correct = ($ok_value == extract_number($input));
+    }
+    else if(is_array($ok_value)) {
         $is_correct = false;
         foreach($ok_value as $val) {
             if($input == $val) {
@@ -118,18 +82,33 @@ function process_response($context, $state, $input) {
     else {
         $is_correct = ($input == $ok_value);
     }
-    $context->reply($is_correct ? constant("TEXT_CMD_START_TARGET_{$state}_CORRECT") : constant("TEXT_CMD_START_TARGET_{$state}_WRONG"));
 
-    mark_response_and_proceed($context, $state, $is_correct);
+    $context->reply($is_correct ? constant($text_root . '_CORRECT') : constant($text_root . '_WRONG'));
+
+    mark_location($context, $location_code, $is_correct);
+
+    $context->set_state(STATE_MOVING);
+
+    if(defined($text_root . '_OFFYOUGO')) {
+        $context->reply(constant($text_root . '_OFFYOUGO'));
+    }
+    if(defined($text_root . '_OFFYOUGO_POSITION')) {
+        telegram_send_location(
+            $context->get_chat_id(),
+            constant($text_root . '_OFFYOUGO_POSITION')[0],
+            constant($text_root . '_OFFYOUGO_POSITION')[1]
+        );
+    }
 }
 
-function mark_response_and_proceed($context, $state, $is_correct) {
-    // Mark answer
-    db_perform_action("UPDATE `reached_locations` SET `correct_answer` = " . (($is_correct) ? 1 : 0) . ", `answer_timestamp` = NOW() WHERE `id` = {$context->get_identity()} AND `location_id` = {$state}");
-
-    // Proceed
-    $context->set_state(constant("STATE_{$state}_OK"));
-    msg_processing_handle_state($context);
+function mark_location($context, $location_code, $is_correct) {
+    // Mark and proceed
+    db_perform_action(sprintf(
+        'INSERT INTO `reached_locations` (`id`, `location`, `correct_answer`, `answer_timestamp`) VALUES(%2$d, \'%3$s\', %1$d, NOW()) ON DUPLICATE KEY UPDATE `correct_answer` = %1$d, `answer_timestamp` = NOW()',
+        ($is_correct) ? 1 : 0,
+        $context->get_identity(),
+        db_escape($location_code)
+    ));
 }
 
 /**
@@ -139,36 +118,38 @@ function mark_response_and_proceed($context, $state, $is_correct) {
 function msg_processing_handle_response($context) {
     switch($context->get_state()) {
         case STATE_NEW:
-            $code = $context->get_response();
-            $school = db_row_query("SELECT `denominazione`, `comune` FROM `schools` WHERE `codice_scuola` = '" . db_escape($code) . "'");
-            if($school == null) {
-                $context->reply(TEXT_FAILURE_SCHOOL_INVALID);
+        case STATE_MOVING:
+            // TODO: say something
+            return true;
+
+        case STATE_ANSWERING:
+            $last_open_location_code = db_scalar_query(sprintf(
+                "SELECT `location` FROM `reached_locations` WHERE `id` = %d AND `answer_timestamp` IS NULL ORDER BY `timestamp` DESC LIMIT 1",
+                $context->get_identity()
+            ));
+            if($last_open_location_code === null || $last_open_location_code === false) {
+                $context->reply(TEXT_FAILURE_GENERAL);
+                Logger::error("User is 'answering' but has no open reached location", __FILE__, $context);
+                return true;
             }
-            else {
-                $context->reply(TEXT_CMD_REGISTER_SCHOOL_OK, array(
-                    '%SCHOOL_NAME%'  => title_case($school[0]),
-                    '%SCHOOL_PLACE%' => title_case($school[1])
-                ));
 
-                db_perform_action("UPDATE `identities` SET `school_code` = '" . db_escape($code) . "' WHERE `id` = {$context->get_identity()}");
-                $context->set_state(STATE_REG_OK);
-            }
-            msg_processing_handle_state($context);
+            process_response($context, $last_open_location_code);
 
             return true;
 
-        case STATE_1:
-            $input = extract_number($context->get_response());
-            process_response($context, 1, $input);
-            return true;
-
-        case STATE_2:
-            $input = extract_number($context->get_response());
-            process_response($context, 2, $input);
-            return true;
-
-        case STATE_3:
+        case STATE_SELFIE:
+        case STATE_SELFIE_CATCHUP:
             if($context->get_message()->is_photo()) {
+                $last_open_location_code = db_scalar_query(sprintf(
+                    "SELECT `location` FROM `reached_locations` WHERE `id` = %d AND `answer_timestamp` IS NULL ORDER BY `timestamp` DESC LIMIT 1",
+                    $context->get_identity()
+                ));
+                if($last_open_location_code === null || $last_open_location_code === false) {
+                    $context->reply(TEXT_FAILURE_GENERAL);
+                    Logger::error("User is 'answering' but has no open reached location", __FILE__, $context);
+                    return true;
+                }
+
                 telegram_send_chat_action($context->get_chat_id());
 
                 // Update stats
@@ -178,69 +159,53 @@ function msg_processing_handle_response($context) {
                     array('%COUNT%' => $counter)
                 );
 
+                // Fetch photo and process
                 $file_info = telegram_get_file_info($context->get_message()->get_photo_large_id());
-                telegram_download_file($file_info['file_path'], "../selfies/{$context->get_identity()}.jpg");
+                telegram_download_file($file_info['file_path'], sprintf(
+                    "../selfies/%d-%s.jpg",
+                    $context->get_identity(),
+                    LOCATION_SELFIE_FILENAME_MAP[$last_open_location_code]
+                ));
 
-                // Background process photo to produce badge
                 $rootdir = realpath(dirname(__FILE__) . '/..');
-                exec("convert {$rootdir}/selfies/{$context->get_identity()}.jpg -resize 1600x1600^ -gravity center -crop 1600x1600+0+0 +repage {$rootdir}/images/badge.png -composite {$rootdir}/badges/{$context->get_identity()}.jpg > {$rootdir}/badges/{$context->get_identity()}.jpg.log");
+                exec(sprintf(
+                    'convert %1$s/selfies/%2$d-%3$s.jpg -resize 1600x1600^ -gravity center -crop 1600x1600+0+0 +repage %1$s/images/%3$s.png -composite %1$s/badges/%2$d-%3$s.jpg',
+                    $rootdir,
+                    $context->get_identity(),
+                    LOCATION_SELFIE_FILENAME_MAP[$last_open_location_code]
+                ));
 
-                mark_response_and_proceed($context, 3, true);
+                // Send back badge if needed
+                $text_root = LOCATION_TEXT_MAP[$last_open_location_code];
+                if(defined($text_root . '_CAPTION')) {
+                    telegram_send_photo(
+                        $context->get_chat_id(),
+                        sprintf("../badges/%d-%s.jpg", $context->get_identity(), LOCATION_SELFIE_FILENAME_MAP[$last_open_location_code]),
+                        constant($text_root . '_CAPTION')
+                    );
+                }
+
+                if($context->get_state() === STATE_SELFIE_CATCHUP) {
+                    // Catching up the selfie-point, mark as done and end game again
+                    Logger::debug("Completed selfie catching-up, ending again", __FILE__, $context);
+
+                    mark_location($context, LOCATION_SELFIE, true);
+
+                    end_game($context);
+                }
+                else {
+                    mark_location($context, $last_open_location_code, true);
+                }
             }
             else {
-                $context->reply(TEXT_CMD_START_TARGET_3_NOT_PHOTO);
+                $context->reply(TEXT_EXPECTING_PHOTO);
             }
             return true;
 
-        case STATE_4:
-            $input = extract_number($context->get_response());
-            process_response($context, 4, $input);
-            return true;
+        case STATE_COMPLETED:
+        case STATE_ARCHIVED:
+            $context->reply(TEXT_STATE_ARCHIVED);
 
-        case STATE_5:
-            $input = $context->get_response();
-            process_response($context, 5, $input);
-            return true;
-
-        case STATE_6:
-            if($context->get_message()->is_photo()) {
-                telegram_send_chat_action($context->get_chat_id());
-
-                $file_info = telegram_get_file_info($context->get_message()->get_photo_large_id());
-                telegram_download_file($file_info['file_path'], "../selfies/{$context->get_identity()}-infoappl.jpg");
-
-                // Sync process photo to produce badge
-                $rootdir = realpath(dirname(__FILE__) . '/..');
-                exec("convert {$rootdir}/selfies/{$context->get_identity()}-infoappl.jpg -resize 1600x1600^ -gravity center -crop 1600x1600+0+0 +repage {$rootdir}/images/badge-infoapp.png -composite {$rootdir}/badges/{$context->get_identity()}-infoappl.jpg");
-
-                mark_response_and_proceed($context, 6, true);
-            }
-            else {
-                $context->reply(TEXT_CMD_START_TARGET_6_NOT_PHOTO);
-            }
-            return true;
-
-        case STATE_PREARCHIVE:
-            if($context->get_message()->is_photo()) {
-                telegram_send_chat_action($context->get_chat_id());
-
-                update_daily_stat_counter($context, STATS_SELFIES, TEXT_CHANNEL_SELFIE_UPDATE, TEXT_CHANNEL_SELFIE_START);
-
-                $file_info = telegram_get_file_info($context->get_message()->get_photo_large_id());
-                telegram_download_file($file_info['file_path'], "../selfies/{$context->get_identity()}.jpg");
-
-                // Sync process photo to produce badge
-                $rootdir = realpath(dirname(__FILE__) . '/..');
-                exec("convert {$rootdir}/selfies/{$context->get_identity()}.jpg -resize 1600x1600^ -gravity center -crop 1600x1600+0+0 +repage {$rootdir}/images/badge.png -composite {$rootdir}/badges/{$context->get_identity()}.jpg");
-
-                telegram_send_photo($context->get_chat_id(), "../badges/{$context->get_identity()}.jpg", TEXT_STATE_5_BADGE_CAPTION);
-                $context->reply(TEXT_STATE_5_RESULTS_6);
-
-                $context->set_state(STATE_ARCHIVED);
-            }
-            else {
-                $context->reply(TEXT_CMD_START_TARGET_6_NOT_PHOTO);
-            }
             return true;
     }
 

@@ -15,23 +15,6 @@ require_once('msg_processing_admin.php');
 require_once('msg_processing_commands.php');
 require_once('msg_processing_state.php');
 
-const STATE_NEW             = 0;    // registration started
-const STATE_REG_OK          = 9;    // registration ok
-const STATE_1               = 10;   // first step
-const STATE_1_OK            = 11;   // first step ok
-const STATE_2               = 20;
-const STATE_2_OK            = 21;
-const STATE_3               = 30;
-const STATE_3_OK            = 31;
-const STATE_4               = 40;
-const STATE_4_OK            = 41;
-const STATE_5               = 50;
-const STATE_5_OK            = 51;
-const STATE_6               = 60;   // info appl selfie
-const STATE_6_OK            = 61;
-const STATE_PREARCHIVE      = 90;   // completed but waiting for final selfie
-const STATE_ARCHIVED        = 99;   // users from previous days
-
 //Needs some error checking here
 $in = new IncomingMessage($message);
 $context = new Context($in);

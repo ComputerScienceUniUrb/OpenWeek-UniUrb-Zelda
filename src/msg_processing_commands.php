@@ -14,63 +14,81 @@ require_once('model/context.php');
 /**
  * Switches to location for current user.
  * @param $context Context.
- * @param $payload Secret string payload that identifies location.
+ * @param $payload Unique code of the location.
  */
-function switch_to_location($context, $payload) {
-    if($payload == 'BqeyekUv') {
-        // Flyer payload for presentation
-        $context->reply(TEXT_CMD_FLYER);
+function switch_to_location($context, $location_code) {
+    $location_reached = db_scalar_query(sprintf(
+        "SELECT COUNT(*) FROM `reached_locations` WHERE `reached_locations`.`id` = %d AND `reached_locations`.`location` = '%s'",
+        $context->get_identity(),
+        db_escape($location_code)
+    )) > 0;
+
+    if($location_reached) {
+        $context->reply(TEXT_CMD_START_ALREADY_REACHED);
         return;
     }
 
-    $location = db_row_query("SELECT l.`id`, l.`target_state`, (SELECT count(*) FROM `reached_locations` AS r WHERE r.`location_id` = l.`id` AND r.`id` = {$context->get_identity()}) AS reached FROM `locations` AS l WHERE `code` = '" . db_escape($payload) . "'");
+    $locations_reached = db_scalar_query(sprintf(
+        "SELECT COUNT(*) FROM `reached_locations` WHERE `reached_locations`.`id` = %d",
+        $context->get_identity()
+    ));
+    if($locations_reached === 0) {
+        $context->reply(TEXT_WELCOME_PREAMBLE);
 
-    if($location !== null) {
-        $location_id = intval($location[0]);
-        $target_state = intval($location[1]);
+        // Handle stats
+        $counter = update_daily_stat_counter($context, STATS_PARTICIPANTS, TEXT_CHANNEL_ARRIVALS_UPDATE, TEXT_CHANNEL_ARRIVALS_START);
 
-        if($location[2] == 0) {
-            // Location never reached
-            $context->set_state($target_state);
+        $context->reply(
+            ($counter == 1) ? TEXT_STATS_ARRIVALS_FIRST : TEXT_STATS_ARRIVALS_OTHER,
+            array('%COUNT%' => $counter)
+        );
+    }
 
-            db_perform_action("INSERT INTO `reached_locations` (`id`, `location_id`, `timestamp`) VALUES ({$context->get_identity()}, {$location_id}, NOW());");
+    db_perform_action(sprintf(
+        "INSERT INTO `reached_locations` (`id`, `location`, `timestamp`) VALUES (%d, '%s', NOW())",
+        $context->get_identity(),
+        db_escape($location_code)
+    ));
 
-            $context->reply(constant('TEXT_CMD_START_TARGET_' . $location_id));
+    $text_root = LOCATION_TEXT_MAP[$location_code];
+    $context->reply(constant($text_root));
 
-            if($location_id == 1) {
-                // Special handling of first location
-                $counter = update_daily_stat_counter($context, STATS_PARTICIPANTS, TEXT_CHANNEL_ARRIVALS_UPDATE, TEXT_CHANNEL_ARRIVALS_START);
+    if(in_array($location_code, LOCATION_SELFIE_ARRAY, true)) {
+        Logger::debug("Location is marked as selfie point, waiting for selfie", __FILE__, $context);
 
-                $context->reply(
-                    ($counter == 1) ? TEXT_STATS_ARRIVALS_FIRST : TEXT_STATS_ARRIVALS_OTHER,
-                    array('%COUNT%' => $counter)
-                );
-            }
+        $context->set_state(STATE_SELFIE);
+    }
+    else if(defined($text_root . '_QUESTION')) {
+        Logger::debug("Location has question", __FILE__, $context);
 
-            if(defined('TEXT_CMD_START_TARGET_' . $location_id . '_QUESTION')) {
-                // If there is a question to be asked
-                $keyboard_array = constant('TEXT_CMD_START_TARGET_' . $location_id . '_KEYBOARD');
-                shuffle($keyboard_array);
+        // If there is a question to be asked
+        $keyboard_array = constant($text_root . '_KEYBOARD');
+        shuffle($keyboard_array);
 
-                $context->reply(constant('TEXT_CMD_START_TARGET_' . $location_id . '_QUESTION'), null, array(
-                    'reply_markup' => array(
-                        'keyboard' => $keyboard_array
-                    )
-                ));
-            }
-        }
-        else {
-            // Location already reached
-            if($context->get_state() / 10 != $location_id) {
-                // Signal only if user has moved elsewhere in the meantime
-                $context->reply(TEXT_CMD_START_ALREADY_REACHED);
-            }
+        $context->reply(constant($text_root . '_QUESTION'), null, array(
+            'reply_markup' => array(
+                'keyboard' => $keyboard_array
+            )
+        ));
 
-            msg_processing_handle_state($context);
-        }
+        $context->set_state(STATE_ANSWERING);
+    }
+    else if(defined($text_root . '_POSITION')) {
+        Logger::debug("Location has position to send", __FILE__, $context);
+
+        telegram_send_location(
+            $context->get_chat_id(),
+            constant($text_root . '_POSITION')[0],
+            constant($text_root . '_POSITION')[1]
+        );
+    }
+    else if($location_code === LOCATION_ENDING) {
+        Logger::debug("Reached last location", __FILE__, $context);
+
+        end_game($context);
     }
     else {
-        $context->reply(TEXT_CMD_START_UNKNOWN_PAYLOAD);
+        Logger::debug("Location has nothing else", __FILE__, $context);
     }
 }
 
@@ -82,68 +100,34 @@ function switch_to_location($context, $payload) {
 function msg_processing_commands($context) {
     $text = $context->get_message()->text;
 
-    if(starts_with($text, '/help')) {
+    if($text === '/help') {
         $context->reply(TEXT_CMD_HELP);
 
         return true;
     }
-    else if(starts_with($text, '/reset') && ENABLE_RESET) {
-        if($context->is_registered()) {
-            db_perform_action("DELETE FROM `reached_locations` WHERE `id` = {$context->get_identity()}");
-        }
-
+    else if($text === '/reset' && ENABLE_RESET) {
+        db_perform_action("DELETE FROM `reached_locations` WHERE `id` = {$context->get_identity()}");
         db_perform_action("DELETE FROM `identities` WHERE `telegram_id` = {$context->get_user_id()}");
 
         $context->reply(TEXT_CMD_RESET);
 
         return true;
     }
-    else if($text === '/start register' || starts_with($text, '/register')) {
-        // Registration command
-
-        if(!$context->is_registered()) {
-            if(!$context->register()) {
-                $context->reply(TEXT_FAILURE_GENERAL);
-            }
-            else {
-                $context->reply(TEXT_CMD_REGISTER_CONFIRM);
-
-                msg_processing_handle_state($context);
-            }
-        }
-        else {
-            $context->reply(TEXT_CMD_REGISTER_REGISTERED);
-
-            msg_processing_handle_state($context);
-        }
+    else if($text === '/start') {
+        // Naked /start message
+        $context->reply(TEXT_CMD_START_WELCOME);
 
         return true;
     }
-    else if(starts_with($text, '/start')) {
+    else if(starts_with($text, '/start ') && $context->get_state() < STATE_COMPLETED) {
         $payload = extract_command_payload($text);
         Logger::debug("Start command with payload '{$payload}'");
 
-        // Naked /start message
-        if($payload === '') {
-            if($context->is_registered()) {
-                $context->reply(TEXT_CMD_START_REGISTERED);
-
-                msg_processing_handle_state($context);
-            }
-            else {
-                $context->reply(TEXT_CMD_START_NEW);
-            }
+        if(array_key_exists($payload, LOCATION_CODE_MAP)) {
+            switch_to_location($context, LOCATION_CODE_MAP[$payload]);
         }
-        // Secret location code
-        else if(mb_strlen($payload) === 8) {
-            Logger::debug("Treasure hunt code: '{$payload}'", __FILE__, $context);
-
-            if($context->require_registration()) {
-                switch_to_location($context, $payload);
-            }
-        }
-        // Something else (?)
         else {
+            // Unknown code
             Logger::warning("Unsupported /start payload received: '{$payload}'", __FILE__, $context);
 
             $context->reply(TEXT_CMD_START_UNKNOWN_PAYLOAD);
@@ -154,5 +138,3 @@ function msg_processing_commands($context) {
 
     return false;
 }
-
- ?>

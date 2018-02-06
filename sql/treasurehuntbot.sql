@@ -1,9 +1,9 @@
 -- phpMyAdmin SQL Dump
--- version 4.7.1
+-- version 4.7.7
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Feb 04, 2018 at 01:49 PM
+-- Generation Time: Feb 04, 2018 at 03:04 PM
 -- Server version: 10.1.26-MariaDB-0+deb9u1
 -- PHP Version: 7.0.27-0+deb9u1
 
@@ -36,19 +36,6 @@ CREATE TABLE `identities` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `locations`
---
-
-CREATE TABLE `locations` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `code` char(8) COLLATE utf8_unicode_ci NOT NULL,
-  `target_state` tinyint(4) DEFAULT NULL,
-  `description` varchar(50) COLLATE utf8_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `log`
 --
 
@@ -69,7 +56,7 @@ CREATE TABLE `log` (
 
 CREATE TABLE `reached_locations` (
   `id` int(10) UNSIGNED NOT NULL,
-  `location_id` int(10) UNSIGNED NOT NULL,
+  `location` varchar(30) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Year-Code',
   `timestamp` datetime NOT NULL,
   `correct_answer` tinyint(1) NOT NULL DEFAULT '0',
   `answer_timestamp` datetime DEFAULT NULL
@@ -127,13 +114,6 @@ ALTER TABLE `identities`
   ADD KEY `school_code` (`school_code`);
 
 --
--- Indexes for table `locations`
---
-ALTER TABLE `locations`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `code` (`code`);
-
---
 -- Indexes for table `log`
 --
 ALTER TABLE `log`
@@ -145,8 +125,7 @@ ALTER TABLE `log`
 -- Indexes for table `reached_locations`
 --
 ALTER TABLE `reached_locations`
-  ADD PRIMARY KEY (`id`,`location_id`),
-  ADD KEY `location_id` (`location_id`);
+  ADD PRIMARY KEY (`id`,`location`);
 
 --
 -- Indexes for table `schools`
@@ -169,11 +148,13 @@ ALTER TABLE `stats`
 --
 ALTER TABLE `identities`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'Internal ID';
+
 --
 -- AUTO_INCREMENT for table `log`
 --
 ALTER TABLE `log`
   MODIFY `log_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
 --
 -- Constraints for dumped tables
 --
@@ -183,11 +164,4 @@ ALTER TABLE `log`
 --
 ALTER TABLE `identities`
   ADD CONSTRAINT `school_constraint` FOREIGN KEY (`school_code`) REFERENCES `schools` (`codice_scuola`) ON DELETE SET NULL ON UPDATE CASCADE;
-
---
--- Constraints for table `reached_locations`
---
-ALTER TABLE `reached_locations`
-  ADD CONSTRAINT `location_id` FOREIGN KEY (`location_id`) REFERENCES `locations` (`id`),
-  ADD CONSTRAINT `user_id` FOREIGN KEY (`id`) REFERENCES `identities` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;

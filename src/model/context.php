@@ -38,19 +38,6 @@ class Context {
     }
 
     /**
-     * Requires the user to be registered in order to continue.
-     * Returns true if the conversation may continue.
-     */
-    function require_registration() {
-        if(!$this->is_registered()) {
-            $this->register();
-            $this->reply(TEXT_CMD_START_WELCOME);
-        }
-
-        return true;
-    }
-
-    /**
      * Gets the user's synthetic (generated) ID.
      */
     function get_identity() {
@@ -145,37 +132,22 @@ class Context {
      */
     function refresh() {
         $identity = db_row_query("SELECT `id`, `full_name`, `is_admin`, `state` FROM `identities` WHERE `telegram_id` = {$this->get_user_id()}");
+
         if(!$identity) {
-            Logger::debug("User identity not registered", __FILE__, $this);
-            return;
-        }
+            Logger::info("User identity not registered, registering", __FILE__, $this);
 
-        $this->identity = intval($identity[0], 10);
-        $this->is_admin = (bool)$identity[2];
-        $this->state = intval($identity[3], 10);
+            $new_id = db_perform_action("INSERT INTO `identities` (`telegram_id`, `full_name`, `first_access`, `last_access`) VALUES({$this->get_user_id()}, '{$this->message->get_sender_full_name()}', NOW(), NOW())");
 
-        db_perform_action("UPDATE `identities` SET `last_access` = NOW() WHERE `id` = {$this->identity}");
-    }
-
-    /**
-     * Register identity for current user.
-     */
-    function register() {
-        if($this->identity === 0) {
-            Logger::info("Registering user identity for Telegram user {$this->get_user_id()}", __FILE__, $this);
-
-            if(db_perform_action("INSERT INTO `identities` (`telegram_id`, `full_name`, `first_access`, `last_access`) VALUES({$this->get_user_id()}, '{$this->message->get_sender_full_name()}', NOW(), NOW())") === false) {
-                Logger::error("Failed to register group status for user #{$this->get_user_id()}", __FILE__, $this);
-                return false;
-            }
-            else {
-                $this->refresh();
-
-                return true;
-            }
+            $this->identity = $new_id;
+            $this->is_admin = false;
+            $this->state = 0;
         }
         else {
-            return true;
+            $this->identity = intval($identity[0], 10);
+            $this->is_admin = (bool)$identity[2];
+            $this->state = intval($identity[3], 10);
+
+            db_perform_action("UPDATE `identities` SET `last_access` = NOW() WHERE `id` = {$this->identity}");
         }
     }
 
