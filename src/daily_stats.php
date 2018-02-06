@@ -29,7 +29,11 @@ function update_daily_stat_counter($context, $stat_type, $text, $text_if_first) 
         $message_id = $result['message_id'];
 
         // Store message for next update
-        db_perform_action("INSERT INTO `stats` (`type`, `date`, `message_id`, `counter`) VALUES({$stat_type}, CURDATE(), {$message_id}, 1)");
+        db_perform_action(sprintf(
+            "INSERT INTO `stats` (`type`, `date`, `message_id`, `counter`) VALUES(%d, CURDATE(), %d, 1)",
+            $stat_type,
+            ($message_id) ? $message_id : 0
+        ));
 
         return 1;
     }
@@ -37,13 +41,15 @@ function update_daily_stat_counter($context, $stat_type, $text, $text_if_first) 
         $message_id = intval($stats_row[0]);
         $counter = intval($stats_row[1]) + 1;
 
-        // Update existing message
-        telegram_edit_message(CHAT_CHANNEL, $message_id, hydrate($text, array(
-            '%COUNT%' => $counter
-        )), array(
-            'parse_mode' => 'HTML',
-            'disable_web_page_preview' => true
-        ));
+        if($message_id) {
+            // Update existing message
+            telegram_edit_message(CHAT_CHANNEL, $message_id, hydrate($text, array(
+                '%COUNT%' => $counter
+            )), array(
+                'parse_mode' => 'HTML',
+                'disable_web_page_preview' => true
+            ));
+        }
 
         db_perform_action("UPDATE `stats` SET `counter` = `counter` + 1 WHERE `type` = {$stat_type} AND `date` = CURDATE()");
 
