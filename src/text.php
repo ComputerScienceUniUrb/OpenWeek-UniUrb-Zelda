@@ -36,35 +36,29 @@ const TEXT_CMD_START_REGISTERED = "Bentornato, %FULL_NAME%! Questo è il bot ded
 
 const TEXT_CMD_START_UNKNOWN_PAYLOAD = "Non ho capito… Forse hai scritto a mano un link? Ti prego di scansionare i <i>QR Code</i>.";
 
-const TEXT_WELCOME_PREAMBLE = "Benvenuto ad Urbino!\nIo sono Zelda, il bot dell’Università degli Studi di Urbino “Carlo Bo” e ti guiderò alla scoperta dell’Università durante questa <b>giornata di orientamento</b>. Sono stato progettato e sviluppato da docenti e da ex-studenti del <a href=\"http://informatica.uniurb.it\">Corso di Laurea di Informatica Applicata</a> di questa Università. (Ricordati di seguire il canale Telegram @openuniurb per ricevere aggiornamenti. 📢)";
+const TEXT_WELCOME_PREAMBLE = "Benvenuto ad Urbino!\nIo sono Zelda, il bot dell’Università degli Studi di Urbino “Carlo Bo” e ti guiderò alla scoperta dell’Università durante questa <b>giornata di orientamento</b>. Durante il tuo percorso, ti farò alcune domande riguardo all'Università. Rispondi scrivendo oppure utilizzando la tastiera che comparirà.\n\nSono stato progettato e sviluppato da docenti e da ex-studenti del <a href=\"http://informatica.uniurb.it\">Corso di Laurea di Informatica Applicata</a> di questa Università. (Ricordati di seguire il canale Telegram @zeldauniurb per ricevere aggiornamenti. 📢)";
 
-const TEXT_CMD_FLYER = "Ti guiderò alla scoperta dell’Università durante la <b>giornata di orientamento</b>. Sono stato progettato e sviluppato da docenti e da ex-studenti del <a href=\"http://informatica.uniurb.it\">Corso di Laurea di Informatica Applicata</a> di questa Università. (Ricordati di seguire il canale Telegram @openuniurb per ricevere aggiornamenti. 📢)\nCi vediamo <a href=\"https://www.uniurb.it/universitaaperta\">a Urbino</a>!";
+const TEXT_CMD_FLYER = "Ti guiderò alla scoperta dell’Università durante la <b>giornata di orientamento</b>. Sono stato progettato e sviluppato da docenti e da ex-studenti del <a href=\"http://informatica.uniurb.it\">Corso di Laurea di Informatica Applicata</a> di questa Università. (Ricordati di seguire il canale Telegram @zeldauniurb per ricevere aggiornamenti. 📢)\nCi vediamo <a href=\"https://www.uniurb.it/universitaaperta\">a Urbino</a>!";
 
-const TEXT_LOCATION_MERCATALE = "Ora ti trovi a <b>Borgo Mercatale</b>!\nDurante il tuo percorso, ti farò alcune domande riguardo all'Università di Urbino. Rispondi scrivendo oppure utilizzando la tastiera che comparirà.";
-const TEXT_LOCATION_MERCATALE_QUESTION = "Sai in che anno è stata fondata L’Università degli Studi di Urbino “Carlo Bo”?";
-const TEXT_LOCATION_MERCATALE_KEYBOARD = [ [ 'Nel 1506' ], [ 'Nel 1706' ], [ 'Nel 1906' ] ];
-const TEXT_LOCATION_MERCATALE_RESPONSE = 1506;
-const TEXT_LOCATION_MERCATALE_CORRECT = "Complimenti hai indovinato! L’Università di Urbino, fondata nel 1506, con la sua storia ultra-cinquecentenaria è una delle università più antiche d’Europa. Nel 2003 l’università è stata intitolata al senatore a vita Carlo Bo che ne è stato il magnifico rettore per cinquantaquattro anni, dal 1947 al 2001.";
-const TEXT_LOCATION_MERCATALE_WRONG = "Peccato non hai indovinato! Pensa, le origini dell’Università di Urbino risalgono al 1506. L’Università di Urbino con la sua storia ultra-cinquecentenaria è una delle università più antiche d’Europa. Nel 2003 l’università è stata intitolata al senatore a vita Carlo Bo che ne è stato il magnifico rettore per cinquantaquattro anni, dal 1947 al 2001.";
-const TEXT_LOCATION_MERCATALE_OFFYOUGO = "Come primo passo dovrai raggiungere il <b>Polo Didattico Volponi</b> che si trova in via Saffi al numero 15. Utilizza la mappa per raggiungere più facilmente la tua destinazione.";
-const TEXT_LOCATION_MERCATALE_OFFYOUGO_POSITION = [ 43.722113, 12.636623 ];
+const TEXT_LOCATION_MERCATALE = "Ora ti trovi a <b>Borgo Mercatale</b>!\nCome primo passo dovrai raggiungere il <b>Polo Didattico Volponi</b> che si trova in via Saffi al numero 15. Utilizza la mappa per raggiungere più facilmente la tua destinazione.";
+const TEXT_LOCATION_MERCATALE_POSITION = [ 43.722113, 12.636623 ];
 
-const TEXT_LOCATION_STALUCIA = "Ora ti trovi presso la <b>Porta S. Lucia</b>!\nDurante il tuo percorso, ti farò alcune domande riguardo all'Università di Urbino. Rispondi scrivendo oppure utilizzando la tastiera che comparirà.";
-const TEXT_LOCATION_STALUCIA_QUESTION = "Sai in che anno è stata fondata L’Università degli Studi di Urbino “Carlo Bo”?";
-const TEXT_LOCATION_STALUCIA_KEYBOARD = [ [ 'Nel 1506' ], [ 'Nel 1706' ], [ 'Nel 1906' ] ];
-const TEXT_LOCATION_STALUCIA_RESPONSE = 1506;
-const TEXT_LOCATION_STALUCIA_CORRECT = "Complimenti hai indovinato! L’Università di Urbino, fondata nel 1506, con la sua storia ultra-cinquecentenaria è una delle università più antiche d’Europa. Nel 2003 l’università è stata intitolata al senatore a vita Carlo Bo che ne è stato il magnifico rettore per cinquantaquattro anni, dal 1947 al 2001.";
-const TEXT_LOCATION_STALUCIA_WRONG = "Peccato non hai indovinato! Pensa, le origini dell’Università di Urbino risalgono al 1506. L’Università di Urbino con la sua storia ultra-cinquecentenaria è una delle università più antiche d’Europa. Nel 2003 l’università è stata intitolata al senatore a vita Carlo Bo che ne è stato il magnifico rettore per cinquantaquattro anni, dal 1947 al 2001.";
-const TEXT_LOCATION_STALUCIA_OFFYOUGO = "Come primo passo dovrai raggiungere il <b>Polo Didattico Volponi</b> che si trova in via Saffi al numero 15. Utilizza la mappa per raggiungere più facilmente la tua destinazione.";
-const TEXT_LOCATION_STALUCIA_OFFYOUGO_POSITION = [ 43.722113, 12.636623 ];
+const TEXT_LOCATION_STALUCIA = "Ora ti trovi presso la <b>Porta S. Lucia</b>!\nCome primo passo dovrai raggiungere il <b>Polo Didattico Volponi</b> che si trova in via Saffi al numero 15. Utilizza la mappa per raggiungere più facilmente la tua destinazione.";
+const TEXT_LOCATION_STALUCIA_POSITION = [ 43.722113, 12.636623 ];
 
 const TEXT_LOCATION_VOLPONI = "Eccoci al <b>Polo Didattico Volponi</b>!\nIl primo appuntamento è in aula magna al <b>piano E</b> dove il Rettore dell’Università sarà felice di descriverti i punti di forza della nostra Università. In seguito potrai esplorare, ai piani B, C e D, le sale espositive di tutti i corsi di laurea presenti ad Urbino, e al piano A i servizi di supporto allo studio.";
-const TEXT_LOCATION_VOLPONI_QUESTION = "Sai quanti studenti sono attualmente iscritti alla nostra università?";
-const TEXT_LOCATION_VOLPONI_KEYBOARD = [ [ 'Circa 8000' ], [ 'Circa 10000' ], [ 'Più di 13000' ] ];
-const TEXT_LOCATION_VOLPONI_RESPONSE = 13000;
-const TEXT_LOCATION_VOLPONI_CORRECT = "Complimenti, hai indovinato! Gli iscritti attuali sono più di 13.000. Pensa che il comune di Urbino ha circa 15.000 abitanti e quindi gli studenti dell’Università sono un numero quasi pari a quello degli abitanti. Questo significa che l’intera città è un vero e proprio campus universitario.";
-const TEXT_LOCATION_VOLPONI_WRONG = "Peccato non hai indovinato! Gli iscritti attuali sono molti di più: sono addirittura più di 13.000. Pensa che il comune di Urbino ha circa 15.000 abitanti e quindi gli studenti dell’Università sono un numero quasi pari a quello degli abitanti. Questo significa che l’intera città è un vero e proprio campus universitario.";
-const TEXT_LOCATION_VOLPONI_OFFYOUGO = "Ora avrai l’intera mattinata per poter conoscere l’intera offerta formativa dell’Università degli Studi di Urbino “Carlo Bo”.";
+const TEXT_LOCATION_VOLPONI_QUESTION = "Sai in che anno è stata fondata L’Università degli Studi di Urbino “Carlo Bo”?";
+const TEXT_LOCATION_VOLPONI_KEYBOARD = [ [ 'Nel 1506' ], [ 'Nel 1706' ], [ 'Nel 1906' ] ];
+const TEXT_LOCATION_VOLPONI_RESPONSE = 1506;
+const TEXT_LOCATION_VOLPONI_CORRECT = "Complimenti hai indovinato! L’Università di Urbino, fondata nel 1506, con la sua storia ultra-cinquecentenaria è una delle università più antiche d’Europa. Nel 2003 l’università è stata intitolata al senatore a vita Carlo Bo che ne è stato il magnifico rettore per cinquantaquattro anni, dal 1947 al 2001.";
+const TEXT_LOCATION_VOLPONI_WRONG = "Peccato non hai indovinato! Pensa, le origini dell’Università di Urbino risalgono al 1506. L’Università di Urbino con la sua storia ultra-cinquecentenaria è una delle università più antiche d’Europa. Nel 2003 l’università è stata intitolata al senatore a vita Carlo Bo che ne è stato il magnifico rettore per cinquantaquattro anni, dal 1947 al 2001.";
+
+const TEXT_LOCATION_VOLPONI_2ND_QUESTION = "Sai quanti studenti sono attualmente iscritti alla nostra università?";
+const TEXT_LOCATION_VOLPONI_2ND_KEYBOARD = [ [ 'Circa 8000' ], [ 'Circa 10000' ], [ 'Più di 13000' ] ];
+const TEXT_LOCATION_VOLPONI_2ND_RESPONSE = 13000;
+const TEXT_LOCATION_VOLPONI_2ND_CORRECT = "Complimenti, hai indovinato! Gli iscritti attuali sono più di 13.000. Pensa che il comune di Urbino ha circa 15.000 abitanti e quindi gli studenti dell’Università sono un numero quasi pari a quello degli abitanti. Questo significa che l’intera città è un vero e proprio campus universitario.";
+const TEXT_LOCATION_VOLPONI_2ND_WRONG = "Peccato non hai indovinato! Gli iscritti attuali sono molti di più: sono addirittura più di 13.000. Pensa che il comune di Urbino ha circa 15.000 abitanti e quindi gli studenti dell’Università sono un numero quasi pari a quello degli abitanti. Questo significa che l’intera città è un vero e proprio campus universitario.";
+const TEXT_LOCATION_VOLPONI_2ND_OFFYOUGO = "Ora avrai l’intera mattinata per poter conoscere l’intera offerta formativa dell’Università degli Studi di Urbino “Carlo Bo”.";
 
 const TEXT_LOCATION_VOLPONI_EXIT = "Dopo questa mattinata intensa che ne dici di fare una pausa? Ti guiderò fino alla mensa dei collegi universitari dove potrai usufruire dei servizi che normalmente sono riservati agli studenti dell’Università.\nUtilizza la mappa per raggiungere più facilmente la tua destinazione.";
 const TEXT_LOCATION_VOLPONI_EXIT_POSITION = [ 43.720846, 12.624561 ];
@@ -73,13 +67,18 @@ const TEXT_LOCATION_INFORMATICA = "Hai raggiunto lo stand del Corso di Laurea in
 const TEXT_LOCATION_INFORMATICA_CAPTION = "Ecco qua. Condividi questa immagine con l’hashtag #infoappl! Non dimenticarti anche di prendere un omaggio al nostro stand.";
 
 const TEXT_LOCATION_TRIDENTE = "Eccoci arrivati al <b>Collegio Tridente</b>. Il prossimo passo sarà trovare la mensa e goderti una meritata pausa pranzo. Scendi al piano sottostante. Lì troverai quello che cerchi. Buon pranzo!";
-// Puoi utilizzare la pianta del collegio per orientarti…";
 const TEXT_LOCATION_TRIDENTE_QUESTION = "Sai quanti sono i posti letto disponibili presso i collegi universitari?";
 const TEXT_LOCATION_TRIDENTE_KEYBOARD = [ [ 'Circa 800' ], [ 'Circa 1400' ], [ 'Più di 5000' ] ];
 const TEXT_LOCATION_TRIDENTE_RESPONSE = 1400;
 const TEXT_LOCATION_TRIDENTE_CORRECT = "Esatto! Avrai a disposizione più di 1.400 posti letto dislocati nelle 7 residenze universitarie. Inoltre sappi che sono a tua disposizione 3 mense con oltre 850 posti totali. Ricorda che lo studente è al centro delle nostre attenzioni.";
 const TEXT_LOCATION_TRIDENTE_WRONG = "Peccato, non hai indovinato! I posti disponibili sono più di 1.400 dislocati nelle 7 residenze universitarie. Inoltre sappi che sono a tua disposizione 3 mense con oltre 850 posti totali. Ricorda che lo studente è al centro delle nostre attenzioni.";
-const TEXT_LOCATION_TRIDENTE_OFFYOUGO = "Dopo pranzo ci sposteremo nella parte più alta dei collegi universitari. Dobbiamo raggiungere il <b>teatro del Collegio La Vela</b>. Lì ti aspetteranno delle performance offerte dalle associazioni studentesche per mostrarti uno spaccato di quelle che potrebbero essere le attività da svolgere ad Urbino nel tempo libero. Buon divertimento!\nSe vuoi puoi anche passare per il <i>selfie-point</i> dal quale potrai scattare un selfie proprio qui al Collegio Tridente ed inviarmelo… ne sarei felice.";
+
+const TEXT_LOCATION_TRIDENTE_2ND_QUESTION = "Sai chi è stato il famoso architetto che ha progettato i collegi universitari di Urbino?";
+const TEXT_LOCATION_TRIDENTE_2ND_KEYBOARD = [ [ 'Giancarlo De Carlo' ], [ 'Massimiliano Fuksas' ], [ 'Renzo Piano' ] ];
+const TEXT_LOCATION_TRIDENTE_2ND_RESPONSE = [ "giancarlo de carlo", "de carlo", "carlo", "giancarlo", "decarlo" ];
+const TEXT_LOCATION_TRIDENTE_2ND_CORRECT = "Esattamente! I collegi universitari ed alcuni interventi nel centro storico sono stati progettati dall’architetto <a href=\"https://it.wikipedia.org/wiki/Giancarlo_De_Carlo\">Giancarlo De Carlo</a>. È stato tra i primi a sperimentare ed applicare in architettura la partecipazione da parte degli utenti nelle fasi di progettazione.";
+const TEXT_LOCATION_TRIDENTE_2ND_WRONG = "No. I collegi universitari ed alcuni interventi nel centro storico sono stati progettati dall’architetto <a href=\"https://it.wikipedia.org/wiki/Giancarlo_De_Carlo\">Giancarlo De Carlo</a>. È stato tra i primi a sperimentare ed applicare in architettura la partecipazione da parte degli utenti nelle fasi di progettazione.";
+const TEXT_LOCATION_TRIDENTE_2ND_OFFYOUGO = "Dopo pranzo ci sposteremo nella parte più alta dei collegi universitari. Dobbiamo raggiungere il teatro del <b>Collegio La Vela</b>. Lì ti aspetteranno delle performance offerte dalle associazioni studentesche per mostrarti uno spaccato di quelle che potrebbero essere le attività da svolgere ad Urbino nel tempo libero. Buon divertimento!\n(🖼️ Se vuoi puoi anche passare per il <i>selfie-point</i> dal quale potrai scattare un selfie proprio qui al Collegio Tridente ed inviarmelo… ne sarei felice.)";
 
 const TEXT_LOCATION_SELFIE = "Cosa ne dici di scattare un selfie con i tuoi compagni e di inviarmelo? Ci penserò io poi a ricordarmi di te durane la premiazione finale.";
 const TEXT_LOCATION_SELFIE_CAPTION = "Il tuo distintivo per la partecipazione all’Open Week! 🏅";
@@ -87,36 +86,19 @@ const TEXT_LOCATION_SELFIE_CAPTION = "Il tuo distintivo per la partecipazione al
 const TEXT_LOCATION_END_VELA = "Complimenti sei arrivato alla tappa finale del percorso di orientamento. Qua potrai goderti gli spettacoli offerti dai centri servizi culturali e ricreativi dell'Università presso il teatro del collegio.";
 const TEXT_LOCATION_END_VELA_CAPTION = TEXT_LOCATION_SELFIE_CAPTION;
 
-const TEXT_END_NO_BADGE = "Siccome non hai raggiunto la tappa del <i>selfie point</i>, inviami ora una tua foto in modo da ricevere un distintivo per la tua partecipazione. 🏅\n(Accertati che il soggetto sia ben centrato nell’immagine.)";
+const TEXT_END_NO_BADGE = "Siccome non mi hai inviato una tua foto alla tappa del <i>selfie point</i>, inviami ora un tuo selfie in modo da ricevere un distintivo per la tua partecipazione. 🏅\n(Accertati che il soggetto sia ben centrato nell’immagine.)";
 const TEXT_END_P1 = "Hai concluso la caccia al tesoro! 🏁\n";
 const TEXT_END_P2 = "Durante il tragitto hai raggiunto ";
 const TEXT_END_P3_SING = "solo una tappa";
 const TEXT_END_P3_PLUR = "<b>%REACHED_LOCATIONS%</b> tappe";
 const TEXT_END_P4 = ", rispondendo correttamente a";
 const TEXT_END_P5_NONE = " 0 domande (peccato).";
-const TEXT_END_P5_SING = "d <b>una</b> domanda su 3.";
-const TEXT_END_P5_PLUR = " <b>%CORRECT_ANSWERS%</b> domande su 3!";
+const TEXT_END_P5_SING = "d <b>una</b> domanda su 4.";
+const TEXT_END_P5_PLUR = " <b>%CORRECT_ANSWERS%</b> domande su 4!";
 const TEXT_END_P5_ALL  = " <b>tutte</b> le domande! 🏆";
 const TEXT_END_P5_CLOSE = "\nÈ stato un piacere accompagnarti durante questa giornata. Spero di trovarti di nuovo a Urbino, magari iscritto ad uno dei nostri corsi! 👋";
 
-/*
-const TEXT_CMD_START_TARGET_5 = "Complimenti, sei arrivato alla tappa finale del percorso di orientamento! Qua potrai goderti gli spettacoli offerti dalle associazioni studentesche presso il <b>teatro del collegio</b>.";
-const TEXT_CMD_START_TARGET_5_QUESTION = "Sai chi è stato il famoso architetto che ha progettato i collegi universitari di Urbino?";
-const TEXT_CMD_START_TARGET_5_KEYBOARD = [ [ 'Giancarlo De Carlo' ], [ 'Massimiliano Fuksas' ], [ 'Renzo Piano' ] ];
-const TEXT_CMD_START_TARGET_5_RESPONSE = [ "giancarlo de carlo", "de carlo", "carlo", "giancarlo", "decarlo" ];
-const TEXT_CMD_START_TARGET_5_CORRECT = "Esattamente! I collegi universitari ed alcuni interventi nel centro storico sono stati progettati dall’architetto <a href=\"https://it.wikipedia.org/wiki/Giancarlo_De_Carlo\">Giancarlo De Carlo</a>. È stato tra i primi a sperimentare ed applicare in architettura la partecipazione da parte degli utenti nelle fasi di progettazione.";
-const TEXT_CMD_START_TARGET_5_WRONG = "No. I collegi universitari ed alcuni interventi nel centro storico sono stati progettati dall’architetto <a href=\"https://it.wikipedia.org/wiki/Giancarlo_De_Carlo\">Giancarlo De Carlo</a>. È stato tra i primi a sperimentare ed applicare in architettura la partecipazione da parte degli utenti nelle fasi di progettazione.";
-*/
-
 const TEXT_CMD_START_ALREADY_REACHED = "Sei già stato in questo luogo.";
-
-// Commands
-const TEXT_CMD_REGISTER_CONFIRM = "Ciao, %FULL_NAME%! Benvenuto al bot dell’<b>Open Week</b> presso l’<b>Università di Urbino “Carlo Bo”</b>. 🎉";
-const TEXT_CMD_REGISTER_REGISTERED = "Risulti già registrato. 👍";
-const TEXT_CMD_REGISTER_SCHOOL_OK = "Ok, quindi studi presso la scuola %SCHOOL_NAME% di %SCHOOL_PLACE%.";
-
-const TEXT_STATE_NEW = "Per completare la registrazione, scrivi qui il <i>codice meccanografico</i> della tua scuola di provenienza. (Si tratta di un codice alfanumerico a 10 caratteri.)";
-const TEXT_STATE_REG_OK = "Quando raggiungi Urbino, scansiona il <i>QR Code</i> che troverai a <b>Borgo Mercatale</b> o a <b>Porta Santa Lucia</b>. Ci vediamo lì!\nNel frattempo puoi iscriverti al canale Telegram @openuniurb per ricevere aggiornamenti. 📢";
 
 const TEXT_STATE_ARCHIVED = "La tua caccia al tesoro è conclusa. Spero di rivederti presto a Urbino, magari in uno dei nostri corsi! 👋";
 

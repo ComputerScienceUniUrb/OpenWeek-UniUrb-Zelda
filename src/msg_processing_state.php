@@ -51,7 +51,7 @@ function end_game($context) {
         TEXT_END_P4,
         (($total_answers == 0) ? TEXT_END_P5_NONE :
             (($total_answers == 1) ? TEXT_END_P5_SING :
-                (($total_answers < 3) ? TEXT_END_P5_PLUR : TEXT_END_P5_ALL)
+                (($total_answers < 4) ? TEXT_END_P5_PLUR : TEXT_END_P5_ALL)
             )
         ),
         ($counter == 1) ? TEXT_STATS_COMPLETE_FIRST : TEXT_STATS_COMPLETE_OTHER,
