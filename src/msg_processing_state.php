@@ -30,10 +30,16 @@ function end_game($context) {
     // Stats
     $counter = update_daily_stat_counter($context, STATS_COMPLETED, TEXT_CHANNEL_COMPLETE_UPDATE, TEXT_CHANNEL_COMPLETE_START);
 
-    // Build final response
-    $total_steps = db_scalar_query("SELECT count(*) as `total` FROM `reached_locations` WHERE `id` = {$context->get_identity()}");
+    // Total steps counted excluding auto-promoted locations
+    $total_steps = db_scalar_query(sprintf(
+        "SELECT COUNT(*) AS `answers` FROM `reached_locations` WHERE `id` = %d AND `location` NOT IN ('%s')",
+        $context->get_identity(),
+        implode("','", array_values(LOCATION_AUTOPROMOTE_MAP))
+    ));
+
+    // Count of answers excluding selfie locations
     $total_answers = db_scalar_query(sprintf(
-        "SELECT sum(`correct_answer`) AS `answers` FROM `reached_locations` WHERE `id` = %d AND `location` NOT IN ('%s')",
+        "SELECT SUM(`correct_answer`) AS `answers` FROM `reached_locations` WHERE `id` = %d AND `location` NOT IN ('%s')",
         $context->get_identity(),
         implode("','", LOCATION_SELFIE_ARRAY)
     ));
@@ -98,6 +104,15 @@ function process_response($context, $location_code) {
             constant($text_root . '_OFFYOUGO_POSITION')[0],
             constant($text_root . '_OFFYOUGO_POSITION')[1]
         );
+    }
+
+    // Automatic advancing
+    if(array_key_exists($location_code, LOCATION_AUTOPROMOTE_MAP)) {
+        $target_location_code = LOCATION_AUTOPROMOTE_MAP[$location_code];
+
+        Logger::debug("Location has automatic advancing to '{$target_location_code}'", __FILE__, $context);
+
+        switch_to_location($context, $target_location_code);
     }
 }
 
