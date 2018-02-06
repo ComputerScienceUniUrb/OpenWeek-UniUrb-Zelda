@@ -74,7 +74,7 @@ class Logger {
 
             // Log to DB if needed
             if(DEBUG_TO_DB || $level > self::SEVERITY_DEBUG) {
-                $identity = ($context != null && $context->get_internal_id() != null) ? $context->get_internal_id() : 'NULL';
+                $identity = ($context != null && $context->get_identity() != null) ? $context->get_identity() : 'NULL';
 
                 db_perform_action("INSERT INTO `log` (`log_id`, `severity`, `tag`, `message`, `timestamp`, `identity_id`) VALUES(DEFAULT, {$level}, '" . db_escape($base_tag) . "', '" . db_escape($message) . "', NOW(), {$identity})");
             }
