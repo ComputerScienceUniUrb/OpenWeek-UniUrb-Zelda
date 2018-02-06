@@ -51,7 +51,11 @@ function switch_to_location($context, $location_code) {
     ));
 
     $text_root = LOCATION_TEXT_MAP[$location_code];
-    $context->reply(constant($text_root));
+
+    if(defined($text_root)) {
+        // Send base message, if set
+        $context->reply(constant($text_root));
+    }
 
     if(in_array($location_code, LOCATION_SELFIE_ARRAY, true)) {
         Logger::debug("Location is marked as selfie point, waiting for selfie", __FILE__, $context);
