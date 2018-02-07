@@ -116,13 +116,19 @@ function hydrate($text, $map = null) {
  * Always returns a valid array.
  */
 function unite_arrays($a, $b) {
-    if(!$a || !is_array($a)) {
+    if(!$a) {
         $a = array();
     }
-
-    if($b && is_array($b)) {
-        $a = array_merge($a, $b);
+    if(!is_array($a)) {
+        $a = array($a);
     }
 
-    return $a;
+    if(!$b) {
+        $b = array();
+    }
+    if(!is_array($b)) {
+        $b = array($b);
+    }
+
+    return array_merge($a, $b);
 }

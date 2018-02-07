@@ -34,7 +34,7 @@ function end_game($context) {
     $total_steps = db_scalar_query(sprintf(
         "SELECT COUNT(*) AS `answers` FROM `reached_locations` WHERE `id` = %d AND `location` NOT IN ('%s')",
         $context->get_identity(),
-        implode("','", array_values(LOCATION_AUTOPROMOTE_MAP))
+        implode("','", LOCATION_IGNORE_IN_COUNT)
     ));
 
     // Count of answers excluding selfie locations
