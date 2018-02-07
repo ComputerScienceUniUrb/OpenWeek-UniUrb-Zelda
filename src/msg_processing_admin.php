@@ -16,7 +16,7 @@ function msg_processing_admin($context) {
     }
     else if($text === '/results') {
         $leaderboard = db_table_query(sprintf(
-            "SELECT *, (SELECT COUNT(*) FROM `reached_locations` AS rinn WHERE rinn.`id` = `agg`.`id` AND rinn.`location` = '%s') AS `completed` FROM (SELECT `identities`.`id`, `identities`.`full_name`, COUNT(`reached_locations`.`location`) AS `steps`, SUM(`reached_locations`.`correct_answer`) AS `correct`, MAX(`reached_locations`.`timestamp`) AS `latest_step` FROM `identities` LEFT OUTER JOIN `reached_locations` ON `identities`.`id` = `reached_locations`.`id` WHERE `reached_locations`.`location` NOT IN ('%s') GROUP BY `identities`.`id` HAVING DATE(`latest_step`) = DATE(NOW()) ORDER BY `correct` DESC, `steps` DESC, `latest_step` ASC, `identities`.`id` ASC) AS `agg` HAVING `completed` = 1 LIMIT 40",
+            "SELECT *, (SELECT COUNT(*) FROM `reached_locations` AS rinn WHERE rinn.`id` = `agg`.`id` AND rinn.`location` = '%s') AS `completed` FROM (SELECT `identities`.`id`, `identities`.`full_name`, COUNT(`reached_locations`.`location`) AS `steps`, SUM(`reached_locations`.`correct_answer`) AS `correct`, MAX(`reached_locations`.`timestamp`) AS `latest_step` FROM `identities` LEFT OUTER JOIN `reached_locations` ON `identities`.`id` = `reached_locations`.`id` WHERE `reached_locations`.`location` NOT IN ('%s') GROUP BY `identities`.`id` HAVING DATE(`latest_step`) = DATE(NOW()) ORDER BY `correct` DESC, `steps` DESC, `latest_step` ASC, `identities`.`id` ASC) AS `agg` ORDER BY `completed` DESC LIMIT 40",
             db_escape(LOCATION_SELFIE), // identifies completion of track
             implode("','", LOCATION_IGNORE_IN_COUNT) // locations not to be counted
         ));
@@ -27,6 +27,9 @@ function msg_processing_admin($context) {
             $text .= $leaderboard[$i][1] . " (<code>#" . $leaderboard[$i][0] . "</code>)";
             $text .= " ✔️ " . $leaderboard[$i][3];
             $text .= " 👣 " . $leaderboard[$i][2];
+            if($leaderboard[$i][5]) {
+                $text .= " (compl.)";
+            }
         }
 
         $context->reply($text);
